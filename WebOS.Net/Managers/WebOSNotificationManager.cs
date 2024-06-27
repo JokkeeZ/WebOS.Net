@@ -5,8 +5,8 @@ namespace WebOS.Net.Managers;
 /// <summary>
 /// Manages notifications on a webOS device through the provided <see cref="WebOSClient"/>.
 /// </summary>
-/// <param name="webOS">The webOS client used to communicate with the device.</param>
-public class WebOSNotificationManager(WebOSClient webOS)
+/// <param name="client">The webOS client used to communicate with the device.</param>
+public class WebOSNotificationManager(WebOSClient client)
 {
 	/// <summary>
 	/// Next id for the notification.
@@ -23,7 +23,7 @@ public class WebOSNotificationManager(WebOSClient webOS)
 	/// </exception>
 	public async Task<ToastResponse> ToastAsync(string message)
 	{
-		if (!webOS.IsActive)
+		if (!client.IsActive)
 		{
 			throw new WebOSException("Client is not connected or paired.");
 		}
@@ -39,7 +39,7 @@ public class WebOSNotificationManager(WebOSClient webOS)
 
 		NextId++;
 
-		return await webOS.SendRequestAsync<ToastRequest, ToastResponse, ToastResponsePayload>(request);
+		return await client.SendRequestAsync<ToastRequest, ToastResponse, ToastResponsePayload>(request);
 	}
 
 	/// <summary>
@@ -54,7 +54,7 @@ public class WebOSNotificationManager(WebOSClient webOS)
 	/// </exception>
 	public async Task<AlertResponse> AlertAsync(string message, List<WebOSButton> buttons)
 	{
-		if (!webOS.IsActive)
+		if (!client.IsActive)
 		{
 			throw new WebOSException("Client is not connected or paired.");
 		}
@@ -76,6 +76,6 @@ public class WebOSNotificationManager(WebOSClient webOS)
 
 		NextId++;
 
-		return await webOS.SendRequestAsync<AlertRequest, AlertResponse, AlertResponsePayload>(request);
+		return await client.SendRequestAsync<AlertRequest, AlertResponse, AlertResponsePayload>(request);
 	}
 }

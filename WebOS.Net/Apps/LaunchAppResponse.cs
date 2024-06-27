@@ -1,9 +1,6 @@
 ﻿namespace WebOS.Net.Apps;
 
-public class LaunchAppResponse
-	: WebOSResponse<LaunchAppResponsePayload>
-{
-}
+public class LaunchAppResponse : WebOSResponse<LaunchAppResponsePayload> { }
 
 public class LaunchAppResponsePayload : WebOSResponsePayload
 {

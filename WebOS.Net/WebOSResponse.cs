@@ -8,18 +8,43 @@ namespace WebOS.Net;
 /// <typeparam name="TPayload">Response payload</typeparam>
 public abstract class WebOSResponse<TPayload> where TPayload : WebOSResponsePayload, new()
 {
+	/// <summary>
+	/// Gets or sets the type of the response, indicating the nature of the response.
+	/// </summary>
 	[JsonPropertyName("type")]
 	public string Type { get; set; }
 
+	/// <summary>
+	/// Gets or sets the identifier associated with the response.
+	/// </summary>
 	[JsonPropertyName("id")]
 	[JsonConverter(typeof(ResponseIdConverter))]
 	public string Id { get; set; }
 
+	/// <summary>
+	/// Gets or sets the error message associated with the response, if any.
+	/// </summary>
 	[JsonPropertyName("error")]
 	public string Error { get; set; }
 
+	/// <summary>
+	/// Gets or sets the payload data associated with the response.
+	/// </summary>
 	[JsonPropertyName("payload")]
 	public TPayload Payload { get; set; } = new();
+
+	/// <summary>
+	/// Gets a value indicating whether the request succeeded.
+	/// </summary>
+	/// <remarks>
+	/// The request is considered successful if all of the following conditions are true:
+	/// <list type="bullet">
+	/// <item><description>The response type is "response".</description></item>
+	/// <item><description>The payload's return value is true.</description></item>
+	/// <item><description>There is no error message.</description></item>
+	/// </list>
+	/// </remarks>
+	public bool RequestSucceed => Type == "response" && Payload.ReturnValue && Error == null;
 }
 
 /// <summary>
@@ -27,9 +52,16 @@ public abstract class WebOSResponse<TPayload> where TPayload : WebOSResponsePayl
 /// </summary>
 public abstract class WebOSResponsePayload
 {
+	/// <summary>
+	/// Indicates whether the request succeeded.
+	/// </summary>
 	[JsonPropertyName("returnValue")]
 	public bool ReturnValue { get; set; }
 
+	/// <summary>
+	/// Indicates whether client is subscribed to receiving callbacks about changes(?)
+	/// TODO: Not sure about this one, have to lookup some documentation from somewhere.
+	/// </summary>
 	[JsonPropertyName("subscribed")]
 	public bool Subscribed { get; set; }
 }

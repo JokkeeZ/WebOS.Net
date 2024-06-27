@@ -9,11 +9,11 @@ class Program
 		// Load device details from file if exists.
 		var device = WebOSDevice.FromFileIfExists(FilePath);
 
-		// If file did not exist, search device with uPnP M-SEARCH
 		if (device == null)
 		{
 			try
 			{
+				// If file did not exist, search device with uPnP M-SEARCH
 				device = await WebOSDevice.MSearchForDeviceAsync();
 			}
 			catch (WebOSException ex)
@@ -30,8 +30,6 @@ class Program
 		// Connect to device and start authentication process.
 		var hello = await client.ConnectAsync();
 
-		Console.WriteLine(hello.ToString());
-
 		if (!File.Exists(FilePath))
 		{
 			// Save device details to a file for future use.
@@ -42,12 +40,62 @@ class Program
 		// Check if client is connected and paired
 		if (client.IsActive)
 		{
-			var toast = await client.Notifications.ToastAsync("Hello from WebOS.Net!");
-
-			if (toast.Payload.ReturnValue)
-			{
-				Console.WriteLine("Toast was sent successfully!");
-			}
+			//await OpenSpotify(client);
+			//await GetForegroundAppInfo(client);
+			//await Toast(client);
+			//await Alert(client);
+			//await ListAllApps(client);
+			//await ListAllLaunchPoints(client);
+			//await CloseSpotify(client);
 		}
+	}
+
+	static async Task GetForegroundAppInfo(WebOSClient c)
+	{
+		var info = await c.Apps.GetForegroundAppInfo();
+		Console.WriteLine($"Foreground app id: {info.AppId}");
+	}
+
+	static async Task Toast(WebOSClient c)
+	{
+		await c.Notifications.ToastAsync("Hello :)");
+	}
+
+	static async Task Alert(WebOSClient c)
+	{
+		await c.Notifications.AlertAsync("Hello!",
+		[
+			new("Button 1"),
+			new("Button 2")
+		]);
+	}
+
+	static async Task OpenSpotify(WebOSClient c)
+	{
+		await c.Apps.LaunchAppAsync(new()
+		{
+			Id = "spotify-beehive"
+		});
+	}
+
+	static async Task ListAllApps(WebOSClient c)
+	{
+		foreach (var app in await c.Apps.GetAllAsync())
+		{
+			Console.WriteLine($"App Title: {app.Title}");
+		}
+	}
+
+	static async Task ListAllLaunchPoints(WebOSClient c)
+	{
+		foreach (var app in await c.Apps.GetAllLaunchPointsAsync())
+		{
+			Console.WriteLine($"App Title: {app.Title} | Removable: {app.Removable}");
+		}
+	}
+
+	static async Task CloseSpotify(WebOSClient c)
+	{
+		await c.Apps.CloseAppAsync("spotify-beehive");
 	}
 }

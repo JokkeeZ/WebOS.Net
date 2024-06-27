@@ -1,9 +1,6 @@
 ﻿namespace WebOS.Net.Apps;
 
-public class ListLaunchPointsResponse
-	: WebOSResponse<ListLaunchPointsPayload>
-{
-}
+public class ListLaunchPointsResponse : WebOSResponse<ListLaunchPointsPayload> { }
 
 public class ListLaunchPointsPayload : WebOSResponsePayload
 {
