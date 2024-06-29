@@ -239,11 +239,7 @@ public class WebOSClient : IDisposable
 				throw new WebOSException(registration.Error);
 			}
 
-			if (string.IsNullOrEmpty(ClientKey))
-			{
-				ClientKey = registration.Payload.ClientKey;
-			}
-
+			ClientKey = registration.Payload.ClientKey;
 			return true;
 		}
 
