@@ -1,4 +1,5 @@
-﻿using System.Net.WebSockets;
+﻿using System.Net;
+using System.Net.WebSockets;
 using System.Text;
 using WebOS.Net.Auth;
 using WebOS.Net.Managers;
@@ -15,10 +16,9 @@ public class WebOSClient : IDisposable
 	private readonly ClientWebSocket ws;
 	private bool disposed;
 
-	/// <summary>
-	/// Gets or sets the webOS device associated with this client.
-	/// </summary>
-	public WebOSDevice Device { get; set; }
+	public string ClientKey { get; set; } = string.Empty;
+
+	public IPEndPoint EndPoint { get; set; }
 
 	/// <summary>
 	/// Gets a value indicating whether the client is currently paired with the webOS device.
@@ -34,6 +34,10 @@ public class WebOSClient : IDisposable
 	/// Gets the manager for interacting with applications on the webOS device.
 	/// </summary>
 	public WebOSAppManager Apps { get; init; }
+
+	public WebOSConnectionManager ConnectionManager { get; set; }
+
+	public WebOSSystemManager System { get; init; }
 
 	/// <summary>
 	/// Gets the current state of the WebSocket connection to the webOS device.
@@ -54,12 +58,15 @@ public class WebOSClient : IDisposable
 	/// Initializes a new instance of the <see cref="WebOSClient"/> class with the specified webOS device.
 	/// </summary>
 	/// <param name="device">The webOS device to connect to and interact with.</param>
-	public WebOSClient(WebOSDevice device)
+	public WebOSClient(IPEndPoint iPEndPoint, string clientKey = "")
 	{
-		Device = device;
+		EndPoint = iPEndPoint;
+		ClientKey = clientKey;
 		ws = new();
 		Notifications = new(this);
 		Apps = new(this);
+		System = new(this);
+		ConnectionManager = new(this);
 	}
 
 	/// <summary>
@@ -68,14 +75,14 @@ public class WebOSClient : IDisposable
 	/// <param name="timeout">Connection timeout in seconds (default is 5 seconds).</param>
 	/// <returns>The payload of the 'hello' response upon successful connection.</returns>
 	/// <exception cref="WebOSException">Thrown when connection attempt times or authentication fails.</exception>
-	public async Task<HelloPayload> ConnectAsync(int timeout = 5)
+	public async Task<Hello> ConnectAsync(int timeout = 5)
 	{
 		ws.Options.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
 		cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
 		try
 		{
-			await ws.ConnectAsync(new($"wss://{Device.Host}:{Device.Port}"),
+			await ws.ConnectAsync(new($"wss://{EndPoint.Address}:{EndPoint.Port}"),
 				new CancellationTokenSource(TimeSpan.FromSeconds(timeout)).Token);
 
 			var hello = await HelloRequestAsync();
@@ -201,7 +208,7 @@ public class WebOSClient : IDisposable
 
 	private async Task<HelloResponse> HelloRequestAsync()
 	{
-		var response = await SendRequestAsync<HelloRequest, HelloResponse, HelloPayload>(new());
+		var response = await SendRequestAsync<HelloRequest, HelloResponse, Hello>(new());
 
 		if (response.Type != "hello")
 		{
@@ -214,9 +221,9 @@ public class WebOSClient : IDisposable
 	private async Task<bool> RegistrationRequestAsync()
 	{
 		var request = new RegistrationRequest();
-		request.Payload.ClientKey = Device.ClientKey;
+		request.Payload.ClientKey = ClientKey;
 
-		var response = await SendRequestAsync<RegistrationRequest, RegistrationResponse, RegistrationResponsePayload>(request);
+		var response = await SendRequestAsync<RegistrationRequest, RegistrationResponse, Registration>(request);
 
 		if (response.Type == "registered")
 		{
@@ -225,16 +232,16 @@ public class WebOSClient : IDisposable
 
 		if (response.Type == "response" && response.Payload.PairingType == "PROMPT")
 		{
-			var pairingResponse = await ReadResponseAsync<PairingResponse, PairingResponsePayload>();
+			var registration = await ReadResponseAsync<RegistrationResponse, Registration>();
 
-			if (pairingResponse.Type != "registered")
+			if (registration.Type != "registered")
 			{
-				throw new WebOSException(pairingResponse.Error);
+				throw new WebOSException(registration.Error);
 			}
 
-			if (string.IsNullOrEmpty(Device.ClientKey))
+			if (string.IsNullOrEmpty(ClientKey))
 			{
-				Device.ClientKey = pairingResponse.Payload.ClientKey;
+				ClientKey = registration.Payload.ClientKey;
 			}
 
 			return true;

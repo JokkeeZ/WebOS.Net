@@ -1,8 +1,16 @@
-﻿namespace WebOS.Net.Apps;
+﻿using WebOS.Net.Utils;
 
-public class ListAppsResponse : WebOSResponse<ListAppsResponsePayload> { }
+namespace WebOS.Net.Apps;
 
-public class ListAppsResponsePayload : WebOSResponsePayload
+public class ListAppsRequest : WebOSRequest
+{
+	[JsonPropertyName("uri")]
+	public string Uri { get; } = WebOSApiURL.ListApps;
+}
+
+public class ListAppsResponse : WebOSResponse<ListApps> { }
+
+public class ListApps : WebOSResponsePayload
 {
 	[JsonPropertyName("apps")]
 	public List<WebOSApp> Apps { get; set; } = [];

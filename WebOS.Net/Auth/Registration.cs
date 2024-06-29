@@ -9,57 +9,10 @@ public class RegistrationRequest : WebOSRequest
 	public new string Type { get; } = "register";
 
 	[JsonPropertyName("payload")]
-	public RegistrationRequestPayload Payload { get; } = new();
+	public RegistrationPayload Payload { get; } = new();
 }
 
-public class RegistrationManifest
-{
-	[JsonPropertyName("appVersion")]
-	public string AppVersion { get; } = "1.0";
-
-	[JsonPropertyName("manifestVersion")]
-	public int ManifestVersion { get; } = 1;
-
-	[JsonPropertyName("permissions")]
-	public List<string> Permissions { get; } =
-	[
-		"LAUNCH",
-		"CLOSE",
-		"LAUNCH_WEBAPP",
-		"APP_TO_APP",
-		"TEST_PROTECTED",
-		"READ_APP_STATUS",
-		"TEST_OPEN",
-		"CONTROL_MOUSE_AND_KEYBOARD",
-		"READ_INPUT_DEVICE_LIST",
-		"READ_NETWORK_STATE",
-		"READ_RUNNING_APPS",
-		"READ_CURRENT_CHANNEL",
-		"READ_TV_CHANNEL_LIST",
-		"READ_POWER_STATE",
-		"READ_COUNTRY_INFO",
-		"READ_INSTALLED_APPS",
-		"READ_SETTINGS",
-		"WRITE_NOTIFICATION_TOAST",
-		"CONTROL_DISPLAY",
-		"CONTROL_INPUT_MEDIA_RECORDING",
-		"CONTROL_INPUT_TEXT",
-		"CONTROL_INPUT_JOYSTICK",
-		"CONTROL_POWER",
-		"CONTROL_AUDIO",
-		"CONTROL_INPUT_MEDIA_PLAYBACK",
-		"CONTROL_INPUT_TV",
-		"CONTROL_TV_SCREEN"
-	];
-
-	[JsonPropertyName("signatures")]
-	public List<RegistrationSignature> Signatures { get; } = [new()];
-
-	[JsonPropertyName("signed")]
-	public RegistrationSigned Signed { get; } = new();
-}
-
-public class RegistrationRequestPayload
+public class RegistrationPayload
 {
 	[JsonPropertyName("forcePairing")]
 	public bool ForcePairing { get; } = false;
@@ -74,6 +27,78 @@ public class RegistrationRequestPayload
 	public string ClientKey { get; set; } = string.Empty;
 }
 
+public class RegistrationManifest
+{
+	[JsonPropertyName("appVersion")]
+	public string AppVersion { get; } = "1.0";
+
+	[JsonPropertyName("manifestVersion")]
+	public int ManifestVersion { get; } = 1;
+
+	[JsonPropertyName("permissions")]
+	public List<string> Permissions { get; } =
+	[
+		"LAUNCH",
+		"LAUNCH_WEBAPP",
+		"APP_TO_APP",
+		"CLOSE",
+		"TEST_OPEN",
+		"TEST_PROTECTED",
+		"CONTROL_AUDIO",
+		"CONTROL_DISPLAY",
+		"CONTROL_INPUT_JOYSTICK",
+		"CONTROL_INPUT_MEDIA_RECORDING",
+		"CONTROL_INPUT_MEDIA_PLAYBACK",
+		"CONTROL_INPUT_TV",
+		"CONTROL_POWER",
+		"READ_APP_STATUS",
+		"READ_CURRENT_CHANNEL",
+		"READ_INPUT_DEVICE_LIST",
+		"READ_NETWORK_STATE",
+		"READ_RUNNING_APPS",
+		"READ_TV_CHANNEL_LIST",
+		"WRITE_NOTIFICATION_TOAST",
+		"READ_POWER_STATE",
+		"READ_COUNTRY_INFO",
+		"READ_SETTINGS",
+		"CONTROL_TV_SCREEN",
+		"CONTROL_TV_STANBY",
+		"CONTROL_FAVORITE_GROUP",
+		"CONTROL_USER_INFO",
+		"CHECK_BLUETOOTH_DEVICE",
+		"CONTROL_BLUETOOTH",
+		"CONTROL_TIMER_INFO",
+		"STB_INTERNAL_CONNECTION",
+		"CONTROL_RECORDING",
+		"READ_RECORDING_STATE",
+		"WRITE_RECORDING_LIST",
+		"READ_RECORDING_LIST",
+		"READ_RECORDING_SCHEDULE",
+		"WRITE_RECORDING_SCHEDULE",
+		"READ_STORAGE_DEVICE_LIST",
+		"READ_TV_PROGRAM_INFO",
+		"CONTROL_BOX_CHANNEL",
+		"READ_TV_ACR_AUTH_TOKEN",
+		"READ_TV_CONTENT_STATE",
+		"READ_TV_CURRENT_TIME",
+		"ADD_LAUNCHER_CHANNEL",
+		"SET_CHANNEL_SKIP",
+		"RELEASE_CHANNEL_SKIP",
+		"CONTROL_CHANNEL_BLOCK",
+		"DELETE_SELECT_CHANNEL",
+		"CONTROL_CHANNEL_GROUP",
+		"SCAN_TV_CHANNELS",
+		"CONTROL_TV_POWER",
+		"CONTROL_WOL"
+	];
+
+	[JsonPropertyName("signatures")]
+	public List<RegistrationSignature> Signatures { get; } = [new()];
+
+	[JsonPropertyName("signed")]
+	public RegistrationSigned Signed { get; } = new();
+}
+
 public class RegistrationSignature
 {
 	[JsonPropertyName("signature")]
@@ -86,15 +111,17 @@ public class RegistrationSignature
 public class RegistrationSigned
 {
 	[JsonPropertyName("appId")]
-	public string AppId { get; } = "com.lge.webos.net";
+	public string AppId { get; } = "com.lge.test";
 
 	[JsonPropertyName("created")]
-	public string Created { get; } = "20242706";
+	public string Created { get; } = "20140509";
 
 	[JsonPropertyName("localizedAppNames")]
 	public Dictionary<string, string> LocalizedAppNames { get; } = new()
 	{
-		{ "", "WebOS.Net" }
+		{ "", "LG Remote App" },
+		{ "ko-KR", "리모컨 앱" },
+		{ "zxx-XX", "ЛГ Rэмotэ AПП" }
 	};
 
 	[JsonPropertyName("localizedVendorNames")]
@@ -121,12 +148,25 @@ public class RegistrationSigned
 		"READ_UPDATE_INFO",
 		"UPDATE_FROM_REMOTE_APP",
 		"READ_LGE_TV_INPUT_EVENTS",
-		"READ_TV_CURRENT_TIME",
+		"READ_TV_CURRENT_TIME"
 	];
 
 	[JsonPropertyName("serial")]
-	public string Serial { get; } = "949627f6f7d2440a80d723bb3751085e";
+	public string Serial { get; } = "2f930e2d2cfe083771f68e4fe7bb07";
 
 	[JsonPropertyName("vendorId")]
 	public string VendorId { get; } = "com.lge";
+}
+
+public class RegistrationResponse : WebOSResponse<Registration> { }
+
+public class Registration : WebOSResponsePayload
+{
+	[JsonPropertyName("pairingType")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string PairingType { get; set; }
+
+	[JsonPropertyName("client-key")]
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+	public string ClientKey { get; set; }
 }

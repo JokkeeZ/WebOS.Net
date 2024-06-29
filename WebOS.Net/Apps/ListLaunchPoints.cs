@@ -1,23 +1,31 @@
-﻿namespace WebOS.Net.Apps;
+﻿using WebOS.Net.Utils;
 
-public class ListLaunchPointsResponse : WebOSResponse<ListLaunchPointsPayload> { }
+namespace WebOS.Net.Apps;
 
-public class ListLaunchPointsPayload : WebOSResponsePayload
+public class ListLaunchPointsRequest : WebOSRequest
 {
-	[JsonPropertyName("launchPoints")]
-	public List<LaunchPoint> LaunchPoints { get; set; } = [];
-
-	[JsonPropertyName("caseDetail")]
-	public CaseDetail CaseDetail { get; set; } = new();
+	[JsonPropertyName("uri")]
+	public string Uri { get; } = WebOSApiURL.ListLaunchPoints;
 }
 
-public class CaseDetail
+public class ListLaunchPointsResponse : WebOSResponse<ListLaunchPoints> { }
+
+public class ListLaunchPoints : WebOSResponsePayload
+{
+	[JsonPropertyName("launchPoints")]
+	public List<WebOSLaunchPoint> LaunchPoints { get; set; } = [];
+
+	[JsonPropertyName("caseDetail")]
+	public WebOSCaseDetail CaseDetail { get; set; } = new();
+}
+
+public class WebOSCaseDetail
 {
 	[JsonPropertyName("change")]
 	public List<object> Change { get; set; } = [];
 }
 
-public class LaunchPoint
+public class WebOSLaunchPoint
 {
 	[JsonPropertyName("mediumLargeIcon")]
 	public string MediumLargeIcon { get; set; }
@@ -92,10 +100,10 @@ public class LaunchPoint
 	public bool TitleVisible { get; set; }
 
 	[JsonPropertyName("previewMetadata")]
-	public PreviewMetadata PreviewMetadata { get; set; } = new();
+	public WebOSPreviewMetadata PreviewMetadata { get; set; } = new();
 }
 
-public class PreviewMetadata
+public class WebOSPreviewMetadata
 {
 	[JsonPropertyName("targetEndpoint")]
 	public string TargetEndpoint { get; set; }
@@ -103,4 +111,3 @@ public class PreviewMetadata
 	[JsonPropertyName("sourceEndpoint")]
 	public string SourceEndpoint { get; set; }
 }
-

@@ -1,9 +1,11 @@
-﻿namespace WebOS.Net.Notification;
+﻿using WebOS.Net.Utils;
 
-public class AlertRequest : WebOSRequest
+namespace WebOS.Net.Notification;
+
+public class CreateAlertRequest : WebOSRequest
 {
 	[JsonPropertyName("uri")]
-	public string Uri { get; } = "ssap://system.notifications/createAlert";
+	public string Uri { get; } = WebOSApiURL.CreateAlert;
 
 	[JsonPropertyName("payload")]
 	public AlertRequestPayload Payload { get; } = new();
@@ -25,4 +27,12 @@ public class AlertRequestPayload
 
 	[JsonPropertyName("buttons")]
 	public List<WebOSButton> Buttons { get; set; } = [];
+}
+
+public class AlertResponse : WebOSResponse<CreateAlert> { }
+
+public class CreateAlert : WebOSResponsePayload
+{
+	[JsonPropertyName("alertId")]
+	public string AlertId { get; set; }
 }

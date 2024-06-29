@@ -9,11 +9,6 @@ namespace WebOS.Net.Managers;
 public class WebOSNotificationManager(WebOSClient client)
 {
 	/// <summary>
-	/// Next id for the notification.
-	/// </summary>
-	public int NextId { get; private set; }
-
-	/// <summary>
 	/// Sends an toast notification with message to the webOS.
 	/// </summary>
 	/// <param name="message">Message to display in the notification.</param>
@@ -21,7 +16,7 @@ public class WebOSNotificationManager(WebOSClient client)
 	/// <exception cref="WebOSException">
 	/// Exception that occurs when client is not connected/paired, or trying to send invalid message.
 	/// </exception>
-	public async Task<ToastResponse> ToastAsync(string message)
+	public async Task<CreateToast> ToastAsync(string message)
 	{
 		if (!client.IsActive)
 		{
@@ -33,13 +28,17 @@ public class WebOSNotificationManager(WebOSClient client)
 			throw new WebOSException("Toast message cannot be empty!");
 		}
 
-		var request = new ToastRequest();
+		var request = new CreateToastRequest();
 		request.Payload.Message = message;
-		request.Id = NextId;
 
-		NextId++;
+		var response = await client.SendRequestAsync<CreateToastRequest, ToastResponse, CreateToast>(request);
 
-		return await client.SendRequestAsync<ToastRequest, ToastResponse, ToastResponsePayload>(request);
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
 	}
 
 	/// <summary>
@@ -52,7 +51,7 @@ public class WebOSNotificationManager(WebOSClient client)
 	/// Exception that occurs when client is not connected/paired, 
 	/// trying to send invalid message or <paramref name="buttons"/> is null/empty.
 	/// </exception>
-	public async Task<AlertResponse> AlertAsync(string message, List<WebOSButton> buttons)
+	public async Task<CreateAlert> AlertAsync(string message, List<WebOSButton> buttons)
 	{
 		if (!client.IsActive)
 		{
@@ -69,13 +68,17 @@ public class WebOSNotificationManager(WebOSClient client)
 			throw new WebOSException("Alert needs to have at least 1 button!");
 		}
 
-		var request = new AlertRequest();
+		var request = new CreateAlertRequest();
 		request.Payload.Message = message;
 		request.Payload.Buttons = buttons;
-		request.Id = NextId;
 
-		NextId++;
+		var response = await client.SendRequestAsync<CreateAlertRequest, AlertResponse, CreateAlert>(request);
 
-		return await client.SendRequestAsync<AlertRequest, AlertResponse, AlertResponsePayload>(request);
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
 	}
 }
