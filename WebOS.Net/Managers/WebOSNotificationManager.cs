@@ -3,30 +3,20 @@
 namespace WebOS.Net.Managers;
 
 /// <summary>
-/// Manages notifications on a webOS device through the provided <see cref="WebOSClient"/>.
+/// Interacts with notification and related API calls on a webOS device through the provided <see cref="WebOSClient"/>.
 /// </summary>
 /// <param name="client">The webOS client used to communicate with the device.</param>
 public class WebOSNotificationManager(WebOSClient client)
 {
 	/// <summary>
-	/// Sends an toast notification with message to the webOS.
+	/// Creates an toast notification on webOS device with prodived message.
 	/// </summary>
-	/// <param name="message">Message to display in the notification.</param>
-	/// <returns></returns>
-	/// <exception cref="WebOSException">
-	/// Exception that occurs when client is not connected/paired, or trying to send invalid message.
-	/// </exception>
+	/// <param name="message">Toast message</param>
+	/// <returns>A task that represents the asynchronous operation. The task result is <see cref="CreateToast"/>.</returns>
+	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<CreateToast> ToastAsync(string message)
 	{
-		if (!client.IsActive)
-		{
-			throw new WebOSException("Client is not connected or paired.");
-		}
-
-		if (string.IsNullOrEmpty(message))
-		{
-			throw new WebOSException("Toast message cannot be empty!");
-		}
+		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(message));
 
 		var request = new CreateToastRequest();
 		request.Payload.Message = message;
@@ -42,28 +32,18 @@ public class WebOSNotificationManager(WebOSClient client)
 	}
 
 	/// <summary>
-	/// Sends an alert notification with message and buttons to the webOS.
+	/// Creates an alert notification on webOS device with prodived message.
 	/// </summary>
-	/// <param name="message">Message to display in the notification.</param>
-	/// <param name="buttons">Buttons to display in the notification.</param>
-	/// <returns></returns>
-	/// <exception cref="WebOSException">
-	/// Exception that occurs when client is not connected/paired, 
-	/// trying to send invalid message or <paramref name="buttons"/> is null/empty.
-	/// </exception>
+	/// <param name="message">Alert message</param>
+	/// <param name="buttons">List of <see cref="WebOSButton"/>s to display in the alert notification</param>
+	/// <returns>A task that represents the asynchronous operation. The task result is <see cref="CreateAlert"/>.</returns>
+	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<CreateAlert> AlertAsync(string message, List<WebOSButton> buttons)
 	{
-		if (!client.IsActive)
-		{
-			throw new WebOSException("Client is not connected or paired.");
-		}
+		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(message));
+		ArgumentNullException.ThrowIfNull(nameof(buttons));
 
-		if (string.IsNullOrEmpty(message))
-		{
-			throw new WebOSException("Alert message cannot be empty!");
-		}
-
-		if (buttons == null || buttons.Count == 0)
+		if (buttons.Count < 1)
 		{
 			throw new WebOSException("Alert needs to have at least 1 button!");
 		}

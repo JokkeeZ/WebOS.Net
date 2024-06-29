@@ -48,7 +48,7 @@ public abstract class WebOSResponse<TPayload> where TPayload : WebOSResponsePayl
 }
 
 /// <summary>
-/// Base class for all response payloads from webOS
+/// Base class for all response payloads from webOS.
 /// </summary>
 public abstract class WebOSResponsePayload
 {
@@ -64,4 +64,10 @@ public abstract class WebOSResponsePayload
 	/// </summary>
 	[JsonPropertyName("subscribed")]
 	public bool Subscribed { get; set; }
+
+	/// <summary>
+	/// In some cases payload contains additional error text.
+	/// </summary>
+	[JsonPropertyName("errorText")]
+	public string ErrorText { get; set; }
 }

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using WebOS.Net.Utils;
+﻿using WebOS.Net.Utils;
 
 namespace WebOS.Net.Apps;
 
@@ -15,12 +14,13 @@ public class LaunchRequest : WebOSRequest
 public class LaunchRequestPayload
 {
 	[JsonPropertyName("id")]
-	[DisallowNull]
 	public string Id { get; set; }
 
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	[JsonPropertyName("params")]
 	public string Params { get; set; }
 
+	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	[JsonPropertyName("contentId")]
 	public string ContentId { get; set; }
 }

@@ -1,7 +1,7 @@
 ﻿namespace WebOS.Net;
 
 /// <summary>
-/// Base class for all requests from WebOS.Net to webOS
+/// Base class for all requests to webOS.
 /// </summary>
 public abstract class WebOSRequest
 {

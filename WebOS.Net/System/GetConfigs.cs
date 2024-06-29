@@ -23,4 +23,7 @@ public class GetConfigs : WebOSResponsePayload
 {
 	[JsonPropertyName("configs")]
 	public Dictionary<string, string> Configs { get; set; }
+
+	[JsonPropertyName("missingConfigs")]
+	public List<string> MissingConfigs { get; set; }
 }

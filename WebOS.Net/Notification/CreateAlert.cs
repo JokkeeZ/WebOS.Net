@@ -15,13 +15,13 @@ public class WebOSButton(string label)
 {
 	[JsonPropertyName("label")]
 	public string Label { get; set; } = label;
+
+	[JsonPropertyName("focus")]
+	public bool Focus { get; set; }
 }
 
 public class AlertRequestPayload
 {
-	[JsonPropertyName("title")]
-	public string Title { get; set; } = string.Empty;
-
 	[JsonPropertyName("message")]
 	public string Message { get; set; } = string.Empty;
 

@@ -2,8 +2,17 @@
 
 namespace WebOS.Net.Managers;
 
+/// <summary>
+/// Interacts with system and related API calls on a webOS device through the provided <see cref="WebOSClient"/>.
+/// </summary>
+/// <param name="client">The webOS client used to communicate with the device.</param>
 public class WebOSSystemManager(WebOSClient client)
 {
+	/// <summary>
+	/// Gets system information such as model name, serial number etc.
+	/// </summary>
+	/// <returns>A task that represents the asynchronous operation. The task result is <see cref="GetSystemInfo"/>.</returns>
+	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<GetSystemInfo> GetSystemInfoAsync()
 	{
 		var response = await client
@@ -17,6 +26,11 @@ public class WebOSSystemManager(WebOSClient client)
 		return response.Payload;
 	}
 
+	/// <summary>
+	/// Gets system settings such as locale info and eula status.
+	/// </summary>
+	/// <returns>A task that represents the asynchronous operation. The task result is <see cref="GetSystemSettings"/>.</returns>
+	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<GetSystemSettings> GetSystemSettingsAsync()
 	{
 		var response = await client
@@ -30,6 +44,11 @@ public class WebOSSystemManager(WebOSClient client)
 		return response.Payload;
 	}
 
+	/// <summary>
+	/// Gets available services.
+	/// </summary>
+	/// <returns>A task that represents the asynchronous operation. The task result is <see cref="GetServiceList"/>.</returns>
+	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<GetServiceList> GetServiceListAsync()
 	{
 		var response = await client
@@ -43,12 +62,15 @@ public class WebOSSystemManager(WebOSClient client)
 		return response.Payload;
 	}
 
+	/// <summary>
+	/// Gets configs through the provided list of configNames.
+	/// </summary>
+	/// <param name="configNames">Configuration names.</param>
+	/// <returns>A task that represents the asynchronous operation. The task result is <see cref="GetConfigs"/>.</returns>
+	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<GetConfigs> GetConfigsAsync(List<string> configNames)
 	{
-		if (configNames == null || configNames?.Count == 0)
-		{
-			ArgumentNullException.ThrowIfNullOrEmpty(nameof(configNames));
-		}
+		ArgumentNullException.ThrowIfNull(nameof(configNames));
 
 		var request = new GetConfigsRequest();
 		request.Payload.ConfigNames.AddRange(configNames);
