@@ -31,4 +31,59 @@ public class WebOSAudioManager(WebOSClient client)
 
 		return response.Payload;
 	}
+
+	public async Task<GetVolume> GetVolumeAsync()
+	{
+		var response = await client
+			.SendRequestAsync<GetVolumeRequest, GetVolumeResponse, GetVolume>(new());
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	public async Task<SetVolume> SetVolumeAsync(int volume)
+	{
+		var request = new SetVolumeRequest();
+		request.Payload.Volume = volume;
+
+		var response = await client
+			.SendRequestAsync<SetVolumeRequest, SetVolumeResponse, SetVolume>(request);
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	public async Task<VolumeUp> VolumeUpAsync()
+	{
+		var response = await client
+			.SendRequestAsync<VolumeUpRequest, VolumeUpResponse, VolumeUp>(new());
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	public async Task<VolumeDown> VolumeDownAsync()
+	{
+		var response = await client
+			.SendRequestAsync<VolumeDownRequest, VolumeDownResponse, VolumeDown>(new());
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
 }

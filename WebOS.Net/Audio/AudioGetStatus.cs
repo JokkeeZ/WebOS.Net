@@ -16,6 +16,8 @@ public class AudioGetStatus : WebOSResponsePayload
 	public bool Mute { get; set; }
 
 	public int Volume { get; set; }
+
+	public AudioVolumeStatus VolumeStatus { get; set; }
 }
 
 public class AudioVolumeStatus

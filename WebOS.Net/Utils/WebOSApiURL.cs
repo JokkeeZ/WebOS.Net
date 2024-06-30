@@ -16,6 +16,10 @@ internal static class WebOSApiURL
 	internal const string GetAppState = "ssap://system.launcher/getAppState";
 	internal const string SetMute = "ssap://audio/setMute";
 	internal const string AudioGetStatus = "ssap://audio/getStatus";
+	internal const string GetVolume = "ssap://audio/getVolume";
+	internal const string SetVolume = "ssap://audio/setVolume";
+	internal const string VolumeUp = "ssap://audio/volumeUp";
+	internal const string VolumeDown = "ssap://audio/volumeDown";
 
 	// 404 no such service or method
 	internal const string GetAppStatus = "ssap://com.webos.service.appstatus/getAppStatus";
