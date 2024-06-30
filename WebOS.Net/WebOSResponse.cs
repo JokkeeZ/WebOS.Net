@@ -11,26 +11,22 @@ public abstract class WebOSResponse<TPayload> where TPayload : WebOSResponsePayl
 	/// <summary>
 	/// Gets or sets the type of the response, indicating the nature of the response.
 	/// </summary>
-	[JsonPropertyName("type")]
 	public string Type { get; set; }
 
 	/// <summary>
 	/// Gets or sets the identifier associated with the response.
 	/// </summary>
-	[JsonPropertyName("id")]
 	[JsonConverter(typeof(ResponseIdConverter))]
 	public string Id { get; set; }
 
 	/// <summary>
 	/// Gets or sets the error message associated with the response, if any.
 	/// </summary>
-	[JsonPropertyName("error")]
 	public string Error { get; set; }
 
 	/// <summary>
 	/// Gets or sets the payload data associated with the response.
 	/// </summary>
-	[JsonPropertyName("payload")]
 	public TPayload Payload { get; set; } = new();
 
 	/// <summary>
@@ -55,19 +51,28 @@ public abstract class WebOSResponsePayload
 	/// <summary>
 	/// Indicates whether the request succeeded.
 	/// </summary>
-	[JsonPropertyName("returnValue")]
 	public bool ReturnValue { get; set; }
 
 	/// <summary>
 	/// Indicates whether client is subscribed to receiving callbacks about changes(?)
 	/// TODO: Not sure about this one, have to lookup some documentation from somewhere.
 	/// </summary>
-	[JsonPropertyName("subscribed")]
 	public bool Subscribed { get; set; }
 
 	/// <summary>
 	/// In some cases payload contains additional error text.
 	/// </summary>
-	[JsonPropertyName("errorText")]
 	public string ErrorText { get; set; }
+
+	/// <summary>
+	/// Serializes response to JSON string.
+	/// </summary>
+	/// <returns>JSON <see langword="string"/>.</returns>
+	public override string ToString()
+	{
+		return JsonSerializer.Serialize(this, GetType(), new JsonSerializerOptions()
+		{
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+		});
+	}
 }

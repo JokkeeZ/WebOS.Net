@@ -13,7 +13,12 @@ internal static class WebOSApiURL
 	internal const string GetServiceList = "ssap://api/getServiceList";
 	internal const string GetSystemInfo = "ssap://system/getSystemInfo";
 	internal const string GetSystemSettings = "ssap://settings/getSystemSettings";
+	internal const string GetAppState = "ssap://system.launcher/getAppState";
 
+	// 404 no such service or method
+	internal const string GetAppStatus = "ssap://com.webos.service.appstatus/getAppStatus";
+
+	// Luna URLs
 	internal const string ConnectionManagerGetInfo = "luna://com.webos.service.connectionmanager/getinfo";
 	internal const string ConnectionManagerGetStatus = "luna://com.webos.service.connectionmanager/getstatus";
 }

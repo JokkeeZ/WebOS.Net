@@ -111,4 +111,47 @@ public class WebOSAppManager(WebOSClient client)
 
 		return response.Payload;
 	}
+
+	private async Task<string> GetAppStatusAsync(string appId)
+	{
+		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(appId));
+
+		var response = await client.SendRequestWithJsonResponseAsync<GetAppStatusRequest>(new()
+		{
+			Payload = new()
+			{
+				Id = appId
+			}
+		});
+
+		return response;
+	}
+
+	/// <summary>
+	/// Gets the state of the application. (is it running and/or visible)
+	/// </summary>
+	/// <remarks>
+	/// **THIS ONLY WORKS IF THE APP WAS OPENED WITH THE CURRENT CLIENT.**
+	/// </remarks>
+	/// <param name="appId">The ID of the application to get state from.</param>
+	/// <returns></returns>
+	/// <exception cref="ArgumentException">Thrown when the <paramref name="appId"/> is null or empty.</exception>
+	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
+	public async Task<GetAppState> GetAppStateAsync(string appId)
+	{
+		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(appId));
+
+		var state = new GetAppStateRequest();
+		state.Payload.Id = appId;
+
+		var response = await client
+			.SendRequestAsync<GetAppStateRequest, GetAppStateResponse, GetAppState>(state);
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
 }
