@@ -35,6 +35,8 @@ public class WebOSClient : IDisposable
 	/// </summary>
 	public WebOSAppManager Apps { get; init; }
 
+	public WebOSAudioManager Audio { get; init; }
+
 	public WebOSConnectionManager ConnectionManager { get; set; }
 
 	public WebOSSystemManager System { get; init; }
@@ -70,6 +72,7 @@ public class WebOSClient : IDisposable
 		ws = new();
 		Notifications = new(this);
 		Apps = new(this);
+		Audio = new(this);
 		System = new(this);
 		ConnectionManager = new(this);
 	}
