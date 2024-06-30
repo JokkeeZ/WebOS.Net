@@ -61,4 +61,40 @@ public class WebOSNotificationManager(WebOSClient client)
 
 		return response.Payload;
 	}
+
+	public async Task<CloseToast> CloseToastAsync(string toastId)
+	{
+		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(toastId));
+
+		var request = new CloseToastRequest();
+		request.Payload.ToastId = toastId;
+
+		var response = await client
+			.SendRequestAsync<CloseToastRequest, CloseToastResponse, CloseToast>(request);
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	public async Task<CloseAlert> CloseAlertAsync(string alertId)
+	{
+		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(alertId));
+
+		var request = new CloseAlertRequest();
+		request.Payload.AlertId = alertId;
+
+		var response = await client
+			.SendRequestAsync<CloseAlertRequest, CloseAlertResponse, CloseAlert>(request);
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
 }
