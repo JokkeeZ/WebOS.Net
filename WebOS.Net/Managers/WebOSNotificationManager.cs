@@ -14,7 +14,7 @@ public class WebOSNotificationManager(WebOSClient client)
 	/// <param name="message">Toast message</param>
 	/// <returns>A task that represents the asynchronous operation. The task result is <see cref="CreateToast"/>.</returns>
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
-	public async Task<CreateToast> ToastAsync(string message)
+	public async Task<CreateToast> CreateToastAsync(string message)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(message));
 
@@ -38,7 +38,7 @@ public class WebOSNotificationManager(WebOSClient client)
 	/// <param name="buttons">List of <see cref="WebOSButton"/>s to display in the alert notification</param>
 	/// <returns>A task that represents the asynchronous operation. The task result is <see cref="CreateAlert"/>.</returns>
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
-	public async Task<CreateAlert> AlertAsync(string message, List<WebOSButton> buttons)
+	public async Task<CreateAlert> CreateAlertAsync(string message, List<WebOSButton> buttons)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(message));
 		ArgumentNullException.ThrowIfNull(nameof(buttons));
