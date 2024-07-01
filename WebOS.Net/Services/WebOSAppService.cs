@@ -17,7 +17,7 @@ public class WebOSAppService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<ListAppsRequest, ListAppsResponse, ListApps>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -43,7 +43,7 @@ public class WebOSAppService(WebOSClient client)
 			Payload = payload
 		});
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -61,7 +61,7 @@ public class WebOSAppService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<ListLaunchPointsRequest, ListLaunchPointsResponse, ListLaunchPoints>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -79,7 +79,7 @@ public class WebOSAppService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetForegroundAppInfoRequest, GetForegroundAppInfoResponse, GetForegroundAppInfo>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -87,24 +87,16 @@ public class WebOSAppService(WebOSClient client)
 		return response.Payload;
 	}
 
-	/// <summary>
-	/// Closes an application on the webOS device asynchronously.
-	/// </summary>
-	/// <param name="appId">The ID of the application to close.</param>
-	/// <returns>A task that represents the asynchronous operation. The task result is <see cref="Close"/>.</returns>
-	/// <exception cref="ArgumentException">Thrown when the <paramref name="appId"/> is null or empty.</exception>
-	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
-	public async Task<Close> CloseAppAsync(string appId)
+	public async Task<WebOSResponsePayload> CloseAppAsync(string appId)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(appId));
 
 		var request = new CloseRequest();
 		request.Payload.Id = appId;
 
-		var response = await client
-			.SendRequestAsync<CloseRequest, CloseResponse, Close>(request);
+		var response = await client.SendRequestAsync(request);
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -112,31 +104,12 @@ public class WebOSAppService(WebOSClient client)
 		return response.Payload;
 	}
 
-	private async Task<string> GetAppStatusAsync(string appId)
-	{
-		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(appId));
-
-		var response = await client.SendRequestWithJsonResponseAsync<GetAppStatusRequest>(new()
-		{
-			Payload = new()
-			{
-				Id = appId
-			}
-		});
-
-		return response;
-	}
-
 	/// <summary>
-	/// Gets the state of the application. (is it running and/or visible)
+	/// Gets the app state. App must be opened with current client, otherwise it will give <c>403 access denied</c>.
 	/// </summary>
-	/// <remarks>
-	/// **THIS ONLY WORKS IF THE APP WAS OPENED WITH THE CURRENT CLIENT.**
-	/// </remarks>
-	/// <param name="appId">The ID of the application to get state from.</param>
+	/// <param name="appId"></param>
 	/// <returns></returns>
-	/// <exception cref="ArgumentException">Thrown when the <paramref name="appId"/> is null or empty.</exception>
-	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
+	/// <exception cref="WebOSException"></exception>
 	public async Task<GetAppState> GetAppStateAsync(string appId)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(appId));
@@ -147,7 +120,7 @@ public class WebOSAppService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetAppStateRequest, GetAppStateResponse, GetAppState>(state);
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}

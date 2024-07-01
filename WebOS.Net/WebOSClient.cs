@@ -74,12 +74,12 @@ public class WebOSClient : IDisposable
 	/// Initializes a new instance of the <see cref="WebOSClient"/> class with the specified webOS device.
 	/// </summary>
 	/// <param name="device">The webOS device to connect to and interact with.</param>
-	public WebOSClient(IPEndPoint iPEndPoint, string clientKey = "")
+	public WebOSClient(IPEndPoint iPEndPoint, string clientKey)
 	{
 		Id = Guid.NewGuid().ToString();
 
 		EndPoint = iPEndPoint;
-		ClientKey = clientKey;
+		ClientKey = clientKey ?? string.Empty;
 		ws = new();
 		Notifications = new(this);
 		Apps = new(this);
@@ -227,6 +227,23 @@ public class WebOSClient : IDisposable
 
 		var response = await ReadJsonResponse();
 		return JsonSerializer.Deserialize<TResponse>(response, JsonSerializeOptions);
+	}
+
+	internal async Task<WebOSDefaultResponse> SendRequestAsync<TRequest>(TRequest req)
+	where TRequest : WebOSRequest, new()
+	{
+		req.Id = Id;
+		var json = JsonSerializer.Serialize(req, JsonSerializeOptions);
+#if DEBUG
+		Console.ForegroundColor = ConsoleColor.Green;
+		Console.WriteLine(json);
+		Console.ResetColor();
+#endif
+		var request = Encoding.UTF8.GetBytes(json);
+		await ws.SendAsync(new ArraySegment<byte>(request), WebSocketMessageType.Text, true, cts.Token);
+
+		var response = await ReadJsonResponse();
+		return JsonSerializer.Deserialize<WebOSDefaultResponse>(response, JsonSerializeOptions);
 	}
 
 	private async Task<HelloResponse> HelloRequestAsync()

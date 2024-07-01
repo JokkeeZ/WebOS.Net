@@ -18,7 +18,7 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetSystemInfoRequest, GetSystemInfoResponse, GetSystemInfo>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -36,7 +36,7 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetSystemSettingsRequest, GetSystemSettingsResponse, GetSystemSettings>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -54,7 +54,7 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetServiceListRequest, GetServiceListResponse, GetServiceList>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -78,7 +78,7 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetConfigsRequest, GetConfigsResponse, GetConfigs>(request);
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -91,7 +91,7 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetPowerStateRequest, GetPowerStateResponse, GetPowerState>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -99,12 +99,11 @@ public class WebOSSystemService(WebOSClient client)
 		return response.Payload;
 	}
 
-	public async Task<TurnOff> TurnOffAsync()
+	public async Task<WebOSResponsePayload> TurnOffAsync()
 	{
-		var response = await client
-			.SendRequestAsync<TurnOffRequest, TurnOffResponse, TurnOff>(new());
+		var response = await client.SendRequestAsync<TurnOffRequest>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -116,7 +115,7 @@ public class WebOSSystemService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<TurnOnScreenRequest, TurnOnScreenResponse, TurnOnScreen>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -128,7 +127,7 @@ public class WebOSSystemService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<TurnOffScreenRequest, TurnOffScreenResponse, TurnOffScreen>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}

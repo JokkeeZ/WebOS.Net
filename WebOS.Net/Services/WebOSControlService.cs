@@ -4,11 +4,11 @@ namespace WebOS.Net.Services;
 
 public class WebOSControlService(WebOSClient client)
 {
-	public async Task<Play> PlayAsync()
+	public async Task<WebOSResponsePayload> PlayAsync()
 	{
-		var response = await client.SendRequestAsync<PlayRequest, PlayResponse, Play>(new());
+		var response = await client.SendRequestAsync<PlayRequest>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -16,11 +16,11 @@ public class WebOSControlService(WebOSClient client)
 		return response.Payload;
 	}
 
-	public async Task<Stop> StopAsync()
+	public async Task<WebOSResponsePayload> StopAsync()
 	{
-		var response = await client.SendRequestAsync<StopRequest, StopResponse, Stop>(new());
+		var response = await client.SendRequestAsync<StopRequest>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -28,11 +28,11 @@ public class WebOSControlService(WebOSClient client)
 		return response.Payload;
 	}
 
-	public async Task<Pause> PauseAsync()
+	public async Task<WebOSResponsePayload> PauseAsync()
 	{
-		var response = await client.SendRequestAsync<PauseRequest, PauseResponse, Pause>(new());
+		var response = await client.SendRequestAsync<PauseRequest>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -40,11 +40,11 @@ public class WebOSControlService(WebOSClient client)
 		return response.Payload;
 	}
 
-	public async Task<Rewind> RewindAsync()
+	public async Task<WebOSResponsePayload> RewindAsync()
 	{
-		var response = await client.SendRequestAsync<RewindRequest, RewindResponse, Rewind>(new());
+		var response = await client.SendRequestAsync<RewindRequest>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -52,11 +52,11 @@ public class WebOSControlService(WebOSClient client)
 		return response.Payload;
 	}
 
-	public async Task<FastForward> FastForwardAsync()
+	public async Task<WebOSResponsePayload> FastForwardAsync()
 	{
-		var response = await client.SendRequestAsync<FastForwardRequest, FastForwardResponse, FastForward>(new());
+		var response = await client.SendRequestAsync<FastForwardRequest>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}

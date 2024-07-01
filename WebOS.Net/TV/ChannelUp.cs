@@ -6,7 +6,3 @@ public class ChannelUpRequest : WebOSRequest
 {
 	public override string Uri => WebOSApiURL.ChannelUp;
 }
-
-public class ChannelUpResponse : WebOSResponse<ChannelUp> { }
-
-public class ChannelUp : WebOSResponsePayload { }

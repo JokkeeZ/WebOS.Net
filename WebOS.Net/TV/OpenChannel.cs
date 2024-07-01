@@ -13,7 +13,3 @@ public class OpenChannelRequestPayload
 {
 	public string ChannelNumber { get; set; }
 }
-
-public class OpenChannelResponse : WebOSResponse<OpenChannel> { }
-
-public class OpenChannel : WebOSResponsePayload { }

@@ -11,7 +11,7 @@ public class WebOSAudioService(WebOSClient client)
 
 		var response = await client.SendRequestAsync<SetMuteRequest, SetMuteResponse, SetMute>(req);
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -24,7 +24,7 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<AudioGetStatusRequest, AudioGetStatusResponse, AudioGetStatus>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -37,7 +37,7 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetVolumeRequest, GetVolumeResponse, GetVolume>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -53,7 +53,7 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<SetVolumeRequest, SetVolumeResponse, SetVolume>(request);
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -66,7 +66,7 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<VolumeUpRequest, VolumeUpResponse, VolumeUp>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -79,7 +79,7 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<VolumeDownRequest, VolumeDownResponse, VolumeDown>(new());
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}

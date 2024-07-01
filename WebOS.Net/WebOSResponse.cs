@@ -3,10 +3,21 @@
 namespace WebOS.Net;
 
 /// <summary>
-/// Base class for all responses from webOS.
+/// Base class for all responses from webOS that contain some additional data in the <typeparamref name="TPayload"/>.
 /// </summary>
 /// <typeparam name="TPayload">Response payload</typeparam>
-public abstract class WebOSResponse<TPayload> where TPayload : WebOSResponsePayload, new()
+public class WebOSResponse<TPayload> : WebOSDefaultResponse where TPayload : WebOSResponsePayload, new()
+{
+	/// <summary>
+	/// Gets or sets the payload data associated with the response.
+	/// </summary>
+	public new TPayload Payload { get; set; } = new();
+}
+
+/// <summary>
+/// Base class for all responses from webOS that do not contain any additional data in the payload.
+/// </summary>
+public class WebOSDefaultResponse
 {
 	/// <summary>
 	/// Gets or sets the type of the response, indicating the nature of the response.
@@ -27,26 +38,13 @@ public abstract class WebOSResponse<TPayload> where TPayload : WebOSResponsePayl
 	/// <summary>
 	/// Gets or sets the payload data associated with the response.
 	/// </summary>
-	public TPayload Payload { get; set; } = new();
-
-	/// <summary>
-	/// Gets a value indicating whether the request succeeded.
-	/// </summary>
-	/// <remarks>
-	/// The request is considered successful if all of the following conditions are true:
-	/// <list type="bullet">
-	/// <item><description>The response type is "response".</description></item>
-	/// <item><description>The payload's return value is true.</description></item>
-	/// <item><description>There is no error message.</description></item>
-	/// </list>
-	/// </remarks>
-	public bool RequestSucceed => Type == "response" && Payload.ReturnValue && Error == null;
+	public WebOSResponsePayload Payload { get; set; } = new();
 }
 
 /// <summary>
 /// Base class for all response payloads from webOS.
 /// </summary>
-public abstract class WebOSResponsePayload
+public class WebOSResponsePayload
 {
 	/// <summary>
 	/// Indicates whether the request succeeded.

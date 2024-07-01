@@ -6,7 +6,3 @@ public class TurnOffRequest : WebOSRequest
 {
 	public override string Uri => WebOSApiURL.TurnOff;
 }
-
-public class TurnOffResponse : WebOSResponse<TurnOff> { }
-
-public class TurnOff : WebOSResponsePayload { }

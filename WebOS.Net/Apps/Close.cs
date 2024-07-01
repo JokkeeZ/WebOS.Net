@@ -13,7 +13,3 @@ public class CloseRequestPayload
 {
 	public string Id { get; set; }
 }
-
-public class CloseResponse : WebOSResponse<Close> { }
-
-public class Close : WebOSResponsePayload { }

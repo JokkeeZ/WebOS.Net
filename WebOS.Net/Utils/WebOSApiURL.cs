@@ -41,8 +41,6 @@ internal static class WebOSApiURL
 	internal const string FastForward = "ssap://media.controls/fastForward";
 
 	// 404 no such service or method
-	internal const string GetAppStatus = "ssap://com.webos.service.appstatus/getAppStatus";
-	// 404 no such service or method
 	internal const string TurnOn = "ssap://system/turnOn";
 	// 401 insufficient permissions
 	internal const string GetCurrentSWInformation = "ssap://com.webos.service.update/getCurrentSWInformation";

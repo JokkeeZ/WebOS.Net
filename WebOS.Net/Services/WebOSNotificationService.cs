@@ -23,7 +23,7 @@ public class WebOSNotificationService(WebOSClient client)
 
 		var response = await client.SendRequestAsync<CreateToastRequest, ToastResponse, CreateToast>(request);
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -54,7 +54,7 @@ public class WebOSNotificationService(WebOSClient client)
 
 		var response = await client.SendRequestAsync<CreateAlertRequest, AlertResponse, CreateAlert>(request);
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -72,7 +72,7 @@ public class WebOSNotificationService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<CloseToastRequest, CloseToastResponse, CloseToast>(request);
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
@@ -90,7 +90,7 @@ public class WebOSNotificationService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<CloseAlertRequest, CloseAlertResponse, CloseAlert>(request);
 
-		if (!response.RequestSucceed)
+		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
 			throw new WebOSException(response.Error);
 		}
