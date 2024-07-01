@@ -70,9 +70,6 @@ public abstract class WebOSResponsePayload
 	/// <returns>JSON <see langword="string"/>.</returns>
 	public override string ToString()
 	{
-		return JsonSerializer.Serialize(this, GetType(), new JsonSerializerOptions()
-		{
-			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-		});
+		return JsonSerializer.Serialize(this, GetType(), WebOSClient.JsonSerializeOptions);
 	}
 }

@@ -58,7 +58,7 @@ public class WebOSClient : IDisposable
 	/// </summary>
 	public bool IsActive => IsConnected && IsPaired;
 
-	private readonly JsonSerializerOptions serializeOptions = new()
+	internal static readonly JsonSerializerOptions JsonSerializeOptions = new()
 	{
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase
 	};
@@ -172,7 +172,7 @@ public class WebOSClient : IDisposable
 
 		if (jsonResponse != null)
 		{
-			var response = JsonSerializer.Deserialize<TResponse>(jsonResponse, serializeOptions);
+			var response = JsonSerializer.Deserialize<TResponse>(jsonResponse, JsonSerializeOptions);
 
 			if (response != null)
 			{
@@ -186,7 +186,7 @@ public class WebOSClient : IDisposable
 	internal async Task<string> SendRequestWithJsonResponseAsync<TRequest>(TRequest req)
 	where TRequest : WebOSRequest, new()
 	{
-		var json = JsonSerializer.Serialize(req, serializeOptions);
+		var json = JsonSerializer.Serialize(req, JsonSerializeOptions);
 #if DEBUG
 		Console.ForegroundColor = ConsoleColor.Green;
 		Console.WriteLine(json);
@@ -204,7 +204,7 @@ public class WebOSClient : IDisposable
 	where TResponse : WebOSResponse<TPayload>, new()
 	where TPayload : WebOSResponsePayload, new()
 	{
-		var json = JsonSerializer.Serialize(req, serializeOptions);
+		var json = JsonSerializer.Serialize(req, JsonSerializeOptions);
 #if DEBUG
 		Console.ForegroundColor = ConsoleColor.Green;
 		Console.WriteLine(json);
@@ -214,7 +214,7 @@ public class WebOSClient : IDisposable
 		await ws.SendAsync(new ArraySegment<byte>(request), WebSocketMessageType.Text, true, cts.Token);
 
 		var response = await ReadJsonResponse();
-		return JsonSerializer.Deserialize<TResponse>(response, serializeOptions);
+		return JsonSerializer.Deserialize<TResponse>(response, JsonSerializeOptions);
 	}
 
 	private async Task<HelloResponse> HelloRequestAsync()
