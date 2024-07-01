@@ -34,6 +34,11 @@ internal static class WebOSApiURL
 	internal const string TurnOnScreen = "ssap://com.webos.service.tvpower/power/turnOnScreen";
 	internal const string TurnOffScreen = "ssap://com.webos.service.tvpower/power/turnOffScreen";
 	internal const string TurnOff = "ssap://system/turnOff";
+	internal const string Play = "ssap://media.controls/play";
+	internal const string Stop = "ssap://media.controls/stop";
+	internal const string Pause = "ssap://media.controls/pause";
+	internal const string Rewind = "ssap://media.controls/rewind";
+	internal const string FastForward = "ssap://media.controls/fastForward";
 
 	// 404 no such service or method
 	internal const string GetAppStatus = "ssap://com.webos.service.appstatus/getAppStatus";

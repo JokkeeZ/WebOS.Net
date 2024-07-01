@@ -43,6 +43,8 @@ public class WebOSClient : IDisposable
 
 	public WebOSTVService TV { get; init; }
 
+	public WebOSControlService Control { get; set; }
+
 	/// <summary>
 	/// Gets the current state of the WebSocket connection to the webOS device.
 	/// </summary>
@@ -84,6 +86,7 @@ public class WebOSClient : IDisposable
 		Audio = new(this);
 		System = new(this);
 		TV = new(this);
+		Control = new(this);
 		ConnectionManager = new(this);
 	}
 
