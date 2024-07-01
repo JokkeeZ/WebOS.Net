@@ -68,4 +68,53 @@ public class WebOSTVService(WebOSClient client)
 
 		return response.Payload;
 	}
+
+	public async Task<OpenChannel> OpenChannelAsync(string channelNumber)
+	{
+		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(channelNumber));
+
+		var request = new OpenChannelRequest();
+		request.Payload.ChannelNumber = channelNumber;
+
+		var response = await client
+			.SendRequestAsync<OpenChannelRequest, OpenChannelResponse, OpenChannel>(request);
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	public async Task<GetExternalInputList> GetExternalInputListAsync()
+	{
+		var response = await client
+			.SendRequestAsync<GetExternalInputListRequest, GetExternalInputListResponse, GetExternalInputList>(new());
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	public async Task<SwitchInput> SwitchInputAsync(string inputId)
+	{
+		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(inputId));
+
+		var request = new SwitchInputRequest();
+		request.Payload.InputId = inputId;
+
+		var response = await client
+			.SendRequestAsync<SwitchInputRequest, SwitchInputResponse, SwitchInput>(request);
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
 }

@@ -27,9 +27,14 @@ internal static class WebOSApiURL
 	internal const string GetCurrentChannel = "ssap://tv/getCurrentChannel";
 	internal const string ChannelDown = "ssap://tv/channelDown";
 	internal const string ChannelUp = "ssap://tv/channelUp";
+	internal const string OpenChannel = "ssap://tv/openChannel";
+	internal const string GetExternalInputList = "ssap://tv/getExternalInputList";
+	internal const string SwitchInput = "ssap://tv/switchInput";
 
 	// 404 no such service or method
 	internal const string GetAppStatus = "ssap://com.webos.service.appstatus/getAppStatus";
+	// 401 insufficient permissions
+	internal const string GetCurrentSWInformation = "ssap://com.webos.service.update/getCurrentSWInformation";
 
 	// Luna URLs
 	internal const string ConnectionManagerGetInfo = "luna://com.webos.service.connectionmanager/getinfo";
