@@ -58,6 +58,9 @@ public class WebOSClient : IDisposable
 	/// </summary>
 	public bool IsActive => IsConnected && IsPaired;
 
+	/// <summary>
+	/// Unique id for the requests. webOS will send the id back, so it can be used to verify what client sent the request.
+	/// </summary>
 	public string Id { get; }
 
 	internal static readonly JsonSerializerOptions JsonSerializeOptions = new()

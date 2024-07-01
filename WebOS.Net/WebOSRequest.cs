@@ -16,7 +16,7 @@ public abstract class WebOSRequest
 	public string Type { get; } = "request";
 
 	/// <summary>
-	/// Gets the request <see cref="Utils.WebOSApiURL"/> for the request.
+	/// Gets the <see cref="Utils.WebOSApiURL"/> for the request.
 	/// </summary>
 	public abstract string Uri { get; }
 }

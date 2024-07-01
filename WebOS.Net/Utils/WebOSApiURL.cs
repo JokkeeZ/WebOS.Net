@@ -30,9 +30,15 @@ internal static class WebOSApiURL
 	internal const string OpenChannel = "ssap://tv/openChannel";
 	internal const string GetExternalInputList = "ssap://tv/getExternalInputList";
 	internal const string SwitchInput = "ssap://tv/switchInput";
+	internal const string GetPowerState = "ssap://com.webos.service.tvpower/power/getPowerState";
+	internal const string TurnOnScreen = "ssap://com.webos.service.tvpower/power/turnOnScreen";
+	internal const string TurnOffScreen = "ssap://com.webos.service.tvpower/power/turnOffScreen";
+	internal const string TurnOff = "ssap://system/turnOff";
 
 	// 404 no such service or method
 	internal const string GetAppStatus = "ssap://com.webos.service.appstatus/getAppStatus";
+	// 404 no such service or method
+	internal const string TurnOn = "ssap://system/turnOn";
 	// 401 insufficient permissions
 	internal const string GetCurrentSWInformation = "ssap://com.webos.service.update/getCurrentSWInformation";
 

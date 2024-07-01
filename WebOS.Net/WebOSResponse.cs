@@ -65,6 +65,11 @@ public abstract class WebOSResponsePayload
 	public string ErrorText { get; set; }
 
 	/// <summary>
+	/// In some cases payload contains error code.
+	/// </summary>
+	public string ErrorCode { get; set; }
+
+	/// <summary>
 	/// Serializes response to JSON string.
 	/// </summary>
 	/// <returns>JSON <see langword="string"/>.</returns>

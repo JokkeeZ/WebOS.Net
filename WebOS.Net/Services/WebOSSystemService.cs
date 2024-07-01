@@ -85,4 +85,54 @@ public class WebOSSystemService(WebOSClient client)
 
 		return response.Payload;
 	}
+
+	public async Task<GetPowerState> GetPowerStateAsync()
+	{
+		var response = await client
+			.SendRequestAsync<GetPowerStateRequest, GetPowerStateResponse, GetPowerState>(new());
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	public async Task<TurnOff> TurnOffAsync()
+	{
+		var response = await client
+			.SendRequestAsync<TurnOffRequest, TurnOffResponse, TurnOff>(new());
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	public async Task<TurnOnScreen> TurnOnScreenAsync()
+	{
+		var response = await client.SendRequestAsync<TurnOnScreenRequest, TurnOnScreenResponse, TurnOnScreen>(new());
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	public async Task<TurnOffScreen> TurnOffScreenAsync()
+	{
+		var response = await client.SendRequestAsync<TurnOffScreenRequest, TurnOffScreenResponse, TurnOffScreen>(new());
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
 }
