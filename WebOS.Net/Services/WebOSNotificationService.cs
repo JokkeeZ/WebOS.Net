@@ -1,12 +1,12 @@
 ﻿using WebOS.Net.Notification;
 
-namespace WebOS.Net.Managers;
+namespace WebOS.Net.Services;
 
 /// <summary>
 /// Interacts with notification and related API calls on a webOS device through the provided <see cref="WebOSClient"/>.
 /// </summary>
 /// <param name="client">The webOS client used to communicate with the device.</param>
-public class WebOSNotificationManager(WebOSClient client)
+public class WebOSNotificationService(WebOSClient client)
 {
 	/// <summary>
 	/// Creates an toast notification on webOS device with prodived message.

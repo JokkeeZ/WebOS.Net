@@ -1,8 +1,8 @@
 ﻿using WebOS.Net.Audio;
 
-namespace WebOS.Net.Managers;
+namespace WebOS.Net.Services;
 
-public class WebOSAudioManager(WebOSClient client)
+public class WebOSAudioService(WebOSClient client)
 {
 	public async Task<SetMute> SetMuteAsync(bool mute)
 	{

@@ -1,12 +1,12 @@
 ﻿using WebOS.Net.Apps;
 
-namespace WebOS.Net.Managers;
+namespace WebOS.Net.Services;
 
 /// <summary>
 /// Interacts with application and related API calls on a webOS device through the provided <see cref="WebOSClient"/>.
 /// </summary>
 /// <param name="client">The webOS client used to communicate with the device.</param>
-public class WebOSAppManager(WebOSClient client)
+public class WebOSAppService(WebOSClient client)
 {
 	/// <summary>
 	/// Retrieves a list of all installed apps on the webOS device asynchronously. Including the hidden ones.

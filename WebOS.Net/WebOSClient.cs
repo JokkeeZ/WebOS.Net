@@ -2,7 +2,7 @@
 using System.Net.WebSockets;
 using System.Text;
 using WebOS.Net.Auth;
-using WebOS.Net.Managers;
+using WebOS.Net.Services;
 
 namespace WebOS.Net;
 
@@ -28,18 +28,20 @@ public class WebOSClient : IDisposable
 	/// <summary>
 	/// Gets the manager for interacting with notifications on the webOS device.
 	/// </summary>
-	public WebOSNotificationManager Notifications { get; init; }
+	public WebOSNotificationService Notifications { get; init; }
 
 	/// <summary>
 	/// Gets the manager for interacting with applications on the webOS device.
 	/// </summary>
-	public WebOSAppManager Apps { get; init; }
+	public WebOSAppService Apps { get; init; }
 
-	public WebOSAudioManager Audio { get; init; }
+	public WebOSAudioService Audio { get; init; }
 
-	public WebOSConnectionManager ConnectionManager { get; set; }
+	public WebOSConnectionService ConnectionManager { get; set; }
 
-	public WebOSSystemManager System { get; init; }
+	public WebOSSystemService System { get; init; }
+
+	public WebOSTVService TV { get; init; }
 
 	/// <summary>
 	/// Gets the current state of the WebSocket connection to the webOS device.
@@ -74,6 +76,7 @@ public class WebOSClient : IDisposable
 		Apps = new(this);
 		Audio = new(this);
 		System = new(this);
+		TV = new(this);
 		ConnectionManager = new(this);
 	}
 

@@ -1,12 +1,12 @@
 ﻿using WebOS.Net.System;
 
-namespace WebOS.Net.Managers;
+namespace WebOS.Net.Services;
 
 /// <summary>
 /// Interacts with system and related API calls on a webOS device through the provided <see cref="WebOSClient"/>.
 /// </summary>
 /// <param name="client">The webOS client used to communicate with the device.</param>
-public class WebOSSystemManager(WebOSClient client)
+public class WebOSSystemService(WebOSClient client)
 {
 	/// <summary>
 	/// Gets system information such as model name, serial number etc.

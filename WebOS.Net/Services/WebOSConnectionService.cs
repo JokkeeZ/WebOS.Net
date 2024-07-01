@@ -1,12 +1,12 @@
 ﻿using WebOS.Net.System;
 
-namespace WebOS.Net.Managers;
+namespace WebOS.Net.Services;
 
 /// <summary>
 /// Interacts with ConnectionManager and related API calls on a webOS device through the provided <see cref="WebOSClient"/>.
 /// </summary>
 /// <param name="client">The webOS client used to communicate with the device.</param>
-public class WebOSConnectionManager(WebOSClient client)
+public class WebOSConnectionService(WebOSClient client)
 {
 	/// <summary>
 	/// Gets connection status and details, such as is device connected to internet, WiFi name etc.
