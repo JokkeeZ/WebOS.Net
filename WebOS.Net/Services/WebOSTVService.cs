@@ -15,4 +15,17 @@ public class WebOSTVService(WebOSClient client)
 
 		return response.Payload;
 	}
+
+	public async Task<GetChannelProgramInfo> GetChannelProgramInfoAsync()
+	{
+		var response = await client
+			.SendRequestAsync<GetChannelProgramInfoRequest, GetChannelProgramInfoResponse, GetChannelProgramInfo>(new());
+
+		if (!response.RequestSucceed)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
 }

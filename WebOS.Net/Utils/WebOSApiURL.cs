@@ -23,6 +23,7 @@ internal static class WebOSApiURL
 	internal const string CloseToast = "ssap://system.notifications/closeToast";
 	internal const string CloseAlert = "ssap://system.notifications/closeAlert";
 	internal const string GetChannelList = "ssap://tv/getChannelList";
+	internal const string GetChannelProgramInfo = "ssap://tv/getChannelProgramInfo";
 
 	// 404 no such service or method
 	internal const string GetAppStatus = "ssap://com.webos.service.appstatus/getAppStatus";
