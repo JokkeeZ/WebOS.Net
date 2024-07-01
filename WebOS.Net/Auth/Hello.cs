@@ -2,8 +2,6 @@
 
 public class HelloRequest : WebOSRequest
 {
-	public new string Id { get; } = "hello";
-
 	public new string Type { get; } = "hello";
 
 	[JsonIgnore]

@@ -58,6 +58,8 @@ public class WebOSClient : IDisposable
 	/// </summary>
 	public bool IsActive => IsConnected && IsPaired;
 
+	public string Id { get; }
+
 	internal static readonly JsonSerializerOptions JsonSerializeOptions = new()
 	{
 		PropertyNamingPolicy = JsonNamingPolicy.CamelCase
@@ -69,6 +71,8 @@ public class WebOSClient : IDisposable
 	/// <param name="device">The webOS device to connect to and interact with.</param>
 	public WebOSClient(IPEndPoint iPEndPoint, string clientKey = "")
 	{
+		Id = Guid.NewGuid().ToString();
+
 		EndPoint = iPEndPoint;
 		ClientKey = clientKey;
 		ws = new();
@@ -186,6 +190,7 @@ public class WebOSClient : IDisposable
 	internal async Task<string> SendRequestWithJsonResponseAsync<TRequest>(TRequest req)
 	where TRequest : WebOSRequest, new()
 	{
+		req.Id = Id;
 		var json = JsonSerializer.Serialize(req, JsonSerializeOptions);
 #if DEBUG
 		Console.ForegroundColor = ConsoleColor.Green;
@@ -204,6 +209,7 @@ public class WebOSClient : IDisposable
 	where TResponse : WebOSResponse<TPayload>, new()
 	where TPayload : WebOSResponsePayload, new()
 	{
+		req.Id = Id;
 		var json = JsonSerializer.Serialize(req, JsonSerializeOptions);
 #if DEBUG
 		Console.ForegroundColor = ConsoleColor.Green;

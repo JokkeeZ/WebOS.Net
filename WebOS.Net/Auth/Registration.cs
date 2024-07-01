@@ -2,8 +2,6 @@
 
 public class RegistrationRequest : WebOSRequest
 {
-	public new string Id { get; } = "register_0";
-
 	public new string Type { get; } = "register";
 
 	public RegistrationPayload Payload { get; } = new();
