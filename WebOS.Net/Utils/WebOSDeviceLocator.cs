@@ -49,7 +49,7 @@ public class WebOSDeviceLocator
 		}
 	}
 
-	public static async Task SendWakeOnLan(PhysicalAddress mac)
+	public static async Task SendWakeOnLanAsync(PhysicalAddress mac)
 	{
 		var magicPacket = MagicPacket(mac);
 
