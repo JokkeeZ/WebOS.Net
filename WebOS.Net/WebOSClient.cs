@@ -3,6 +3,7 @@ using System.Net.WebSockets;
 using System.Text;
 using WebOS.Net.Auth;
 using WebOS.Net.Services;
+using WebOS.Net.System;
 
 namespace WebOS.Net;
 
@@ -172,6 +173,57 @@ public class WebOSClient : IDisposable
 #endif
 
 		return receivedResponse;
+	}
+
+		/// <summary>
+	/// Obtains the pointer to input socket.
+	/// </summary>
+	/// <returns>
+	/// Returns new instance of the <see cref="GetPointerInputSocket"/> that contains socket path for the 
+	/// input socket.
+	/// </returns>
+	/// <exception cref="WebOSException">Thrown when request attempt timeouts or invalid response is received.</exception>
+	public async Task<GetPointerInputSocket> GetInputSocketAsync()
+	{
+		var response = await SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocketResponse, GetPointerInputSocket>(new());
+
+		if (response.Type != "response" || !response.Payload.ReturnValue)
+		{
+			throw new WebOSException(response.Error);
+		}
+
+		return response.Payload;
+	}
+
+	/// <summary>
+	/// Connects to given input socket. Input socket can be obtained from <see cref="GetInputSocketAsync"/>.
+	/// </summary>
+	/// <param name="socketPath">Input socket path</param>
+	/// <param name="timeout">Connection timeout in seconds (default is 5 seconds).</param>
+	/// <returns>
+	/// Returns new instance of the <see cref="WebOSPointerInputService"/> that can be used to
+	/// interract with input socket.
+	/// </returns>
+	/// <exception cref="ArgumentException">Thrown when socket path is null or whitespace.</exception>
+	/// <exception cref="WebOSException">Thrown when connection attempt timeouts or socket path is invalid.</exception>
+	public static async Task<WebOSPointerInputService> ConnectToInputSocketAsync(string socketPath, int timeout = 5)
+	{
+		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(socketPath));
+
+		try
+		{
+			var clientWebSocket = new ClientWebSocket();
+			var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeout));
+			clientWebSocket.Options.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+
+			await clientWebSocket.ConnectAsync(new(socketPath), tokenSource.Token);
+
+			return new WebOSPointerInputService(clientWebSocket, tokenSource);
+		}
+		catch (TaskCanceledException ex)
+		{
+			throw new WebOSException("Connection timed out.", ex);
+		}
 	}
 
 	internal async Task<TResponse> ReadResponseAsync<TResponse, TPayload>()
