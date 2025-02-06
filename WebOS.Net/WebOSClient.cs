@@ -96,16 +96,15 @@ public class WebOSClient : IDisposable
 	/// </summary>
 	/// <param name="timeout">Connection timeout in seconds (default is 5 seconds).</param>
 	/// <returns>The payload of the 'hello' response upon successful connection.</returns>
-	/// <exception cref="WebOSException">Thrown when connection attempt times or authentication fails.</exception>
+	/// <exception cref="WebOSException">Thrown when connection attempt times out or authentication fails.</exception>
 	public async Task<Hello> ConnectAsync(int timeout = 5)
 	{
 		ws.Options.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
-		cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+		cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeout));
 
 		try
 		{
-			await ws.ConnectAsync(new($"wss://{EndPoint.Address}:{EndPoint.Port}"),
-				new CancellationTokenSource(TimeSpan.FromSeconds(timeout)).Token);
+			await ws.ConnectAsync(new($"wss://{EndPoint.Address}:{EndPoint.Port}"), cts.Token);
 
 			var hello = await HelloRequestAsync();
 
@@ -120,7 +119,7 @@ public class WebOSClient : IDisposable
 		}
 		catch (TaskCanceledException ex)
 		{
-			throw new WebOSException($"Connection timed out.", ex);
+			throw new WebOSException("Connection timed out.", ex);
 		}
 	}
 
