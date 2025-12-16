@@ -1,4 +1,6 @@
-﻿namespace WebOS.Net.Utils;
+﻿using System.Globalization;
+
+namespace WebOS.Net.Utils;
 
 /// <summary>
 /// Custom JSON converter for converting between string and numeric representations of response IDs.
@@ -10,7 +12,7 @@ public class ResponseIdConverter : JsonConverter<string>
 	reader.TokenType switch
 	{
 		JsonTokenType.String => reader.GetString(),
-		JsonTokenType.Number when reader.TryGetInt32(out var i) => i.ToString(),
+		JsonTokenType.Number when reader.TryGetInt32(out var i) => string.Create(CultureInfo.InvariantCulture, $"{i}"),
 		_ => throw new JsonException($"Unexpected token type {reader.TokenType} when parsing id.")
 	};
 

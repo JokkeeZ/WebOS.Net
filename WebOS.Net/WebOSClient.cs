@@ -1,5 +1,7 @@
 ﻿using System.Net;
+using System.Net.Security;
 using System.Net.WebSockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using WebOS.Net.Auth;
 using WebOS.Net.Services;
@@ -99,7 +101,7 @@ public class WebOSClient : IDisposable
 	/// <exception cref="WebOSException">Thrown when connection attempt times out or authentication fails.</exception>
 	public async Task<Hello> ConnectAsync(int timeout = 5)
 	{
-		ws.Options.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+		ws.Options.RemoteCertificateValidationCallback = SelfSignedLocalhost;
 		cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeout));
 
 		try
@@ -122,6 +124,9 @@ public class WebOSClient : IDisposable
 			throw new WebOSException("Connection timed out.", ex);
 		}
 	}
+
+	static bool SelfSignedLocalhost(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+		=> sslPolicyErrors == SslPolicyErrors.None;
 
 	/// <summary>
 	/// Closes the WebSocket connection to the webOS device asynchronously.
@@ -213,7 +218,7 @@ public class WebOSClient : IDisposable
 		{
 			var clientWebSocket = new ClientWebSocket();
 			var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeout));
-			clientWebSocket.Options.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+			clientWebSocket.Options.RemoteCertificateValidationCallback = SelfSignedLocalhost;
 
 			await clientWebSocket.ConnectAsync(new(socketPath), tokenSource.Token);
 
