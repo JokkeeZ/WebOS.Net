@@ -41,7 +41,6 @@ public class WebOSNotificationService(WebOSClient client)
 	public async Task<CreateAlert> CreateAlertAsync(string message, List<WebOSButton> buttons)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(message));
-		ArgumentNullException.ThrowIfNull(nameof(buttons));
 
 		if (buttons.Count < 1)
 		{

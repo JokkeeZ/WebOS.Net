@@ -70,8 +70,6 @@ public class WebOSSystemService(WebOSClient client)
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<GetConfigs> GetConfigsAsync(List<string> configNames)
 	{
-		ArgumentNullException.ThrowIfNull(nameof(configNames));
-
 		var request = new GetConfigsRequest();
 		request.Payload.ConfigNames.AddRange(configNames);
 

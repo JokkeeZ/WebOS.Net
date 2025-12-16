@@ -35,7 +35,6 @@ public class WebOSAppService(WebOSClient client)
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<Launch> LaunchAppAsync(LaunchRequestPayload payload)
 	{
-		ArgumentNullException.ThrowIfNull(nameof(payload));
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(payload.Id));
 
 		var response = await client.SendRequestAsync<LaunchRequest, LaunchResponse, Launch>(new()
