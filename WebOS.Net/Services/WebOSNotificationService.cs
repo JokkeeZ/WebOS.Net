@@ -21,7 +21,7 @@ public class WebOSNotificationService(WebOSClient client)
 		var request = new CreateToastRequest();
 		request.Payload.Message = message;
 
-		var response = await client.SendRequestAsync<CreateToastRequest, ToastResponse, CreateToast>(request);
+		var response = await client.SendRequestAsync<CreateToastRequest, CreateToast>(request);
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -51,7 +51,7 @@ public class WebOSNotificationService(WebOSClient client)
 		request.Payload.Message = message;
 		request.Payload.Buttons = buttons;
 
-		var response = await client.SendRequestAsync<CreateAlertRequest, AlertResponse, CreateAlert>(request);
+		var response = await client.SendRequestAsync<CreateAlertRequest, CreateAlert>(request);
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -69,7 +69,7 @@ public class WebOSNotificationService(WebOSClient client)
 		request.Payload.ToastId = toastId;
 
 		var response = await client
-			.SendRequestAsync<CloseToastRequest, CloseToastResponse, CloseToast>(request);
+			.SendRequestAsync<CloseToastRequest, CloseToast>(request);
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -87,7 +87,7 @@ public class WebOSNotificationService(WebOSClient client)
 		request.Payload.AlertId = alertId;
 
 		var response = await client
-			.SendRequestAsync<CloseAlertRequest, CloseAlertResponse, CloseAlert>(request);
+			.SendRequestAsync<CloseAlertRequest, CloseAlert>(request);
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{

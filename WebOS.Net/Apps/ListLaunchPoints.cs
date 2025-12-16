@@ -7,8 +7,6 @@ public class ListLaunchPointsRequest : WebOSRequest
 	public override string Uri { get; } = WebOSApiURL.ListLaunchPoints;
 }
 
-public class ListLaunchPointsResponse : WebOSResponse<ListLaunchPoints> { }
-
 public class ListLaunchPoints : WebOSResponsePayload
 {
 	public List<WebOSLaunchPoint> LaunchPoints { get; set; } = [];

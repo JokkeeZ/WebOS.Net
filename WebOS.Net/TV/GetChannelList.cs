@@ -7,8 +7,6 @@ public class GetChannelListRequest : WebOSRequest
 	public override string Uri => WebOSApiURL.GetChannelList;
 }
 
-public class GetChannelListResponse : WebOSResponse<GetChannelList> { }
-
 public class GetChannelList : WebOSResponsePayload
 {
 	public bool IpSatelliteSupport { get; set; }

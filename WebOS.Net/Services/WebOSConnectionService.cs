@@ -16,7 +16,7 @@ public class WebOSConnectionService(WebOSClient client)
 	public async Task<ConnectionManagerGetStatus> GetStatusAsync()
 	{
 		var response = await client
-			.SendRequestAsync<ConnectionManagerGetStatusRequest, ConnectionManagerGetStatusResponse, ConnectionManagerGetStatus>(new());
+			.SendRequestAsync<ConnectionManagerGetStatusRequest, ConnectionManagerGetStatus>(new());
 
 		if (!response.Payload.ReturnValue)
 		{
@@ -34,7 +34,7 @@ public class WebOSConnectionService(WebOSClient client)
 	public async Task<ConnectionManagerGetInfo> GetInfoAsync()
 	{
 		var response = await client
-			.SendRequestAsync<ConnectionManagerGetInfoRequest, ConnectionManagerGetInfoResponse, ConnectionManagerGetInfo>(new());
+			.SendRequestAsync<ConnectionManagerGetInfoRequest, ConnectionManagerGetInfo>(new());
 
 		if (!response.Payload.ReturnValue)
 		{

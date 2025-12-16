@@ -7,8 +7,6 @@ public class GetServiceListRequest : WebOSRequest
 	public override string Uri { get; } = WebOSApiURL.GetServiceList;
 }
 
-public class GetServiceListResponse : WebOSResponse<GetServiceList> { }
-
 public class GetServiceList : WebOSResponsePayload
 {
 	public List<WebOSService> Services { get; set; }

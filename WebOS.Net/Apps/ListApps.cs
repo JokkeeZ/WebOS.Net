@@ -7,8 +7,6 @@ public class ListAppsRequest : WebOSRequest
 	public override string Uri { get; } = WebOSApiURL.ListApps;
 }
 
-public class ListAppsResponse : WebOSResponse<ListApps> { }
-
 public class ListApps : WebOSResponsePayload
 {
 	public List<WebOSApp> Apps { get; set; } = [];

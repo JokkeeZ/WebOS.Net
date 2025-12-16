@@ -14,8 +14,6 @@ public class ToastRequestPayload
 	public string Message { get; set; } = string.Empty;
 }
 
-public class ToastResponse : WebOSResponse<CreateToast> { }
-
 public class CreateToast : WebOSResponsePayload
 {
 	public string ToastId { get; set; }

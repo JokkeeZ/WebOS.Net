@@ -7,8 +7,6 @@ public class GetChannelProgramInfoRequest : WebOSRequest
 	public override string Uri => WebOSApiURL.GetChannelProgramInfo;
 }
 
-public class GetChannelProgramInfoResponse : WebOSResponse<GetChannelProgramInfo> { }
-
 public class GetChannelProgramInfo : WebOSResponsePayload
 {
 	public WebOSChannel Channel { get; set; }

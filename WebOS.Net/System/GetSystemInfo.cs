@@ -7,8 +7,6 @@ public class GetSystemInfoRequest : WebOSRequest
 	public override string Uri { get; } = WebOSApiURL.GetSystemInfo;
 }
 
-public class GetSystemInfoResponse : WebOSResponse<GetSystemInfo> { }
-
 public class GetSystemInfo : WebOSResponsePayload
 {
 	public WebOSSystemInfoFeatures Features { get; set; }

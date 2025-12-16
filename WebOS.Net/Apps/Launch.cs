@@ -13,9 +13,6 @@ public class LaunchRequestPayload
 {
 	public string Id { get; set; }
 
-	//[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	//public string Params { get; set; }
-
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	public LaunchParams Params { get; set; }
 
@@ -27,8 +24,6 @@ public class LaunchParams
 {
 	public string Target { get; set; }
 }
-
-public class LaunchResponse : WebOSResponse<Launch> { }
 
 public class Launch : WebOSResponsePayload
 {

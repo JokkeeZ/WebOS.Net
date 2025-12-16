@@ -9,7 +9,7 @@ public class WebOSAudioService(WebOSClient client)
 		var req = new SetMuteRequest();
 		req.Payload.Mute = mute;
 
-		var response = await client.SendRequestAsync<SetMuteRequest, SetMuteResponse, SetMute>(req);
+		var response = await client.SendRequestAsync<SetMuteRequest, SetMute>(req);
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -22,7 +22,7 @@ public class WebOSAudioService(WebOSClient client)
 	public async Task<AudioGetStatus> GetStatusAsync()
 	{
 		var response = await client
-			.SendRequestAsync<AudioGetStatusRequest, AudioGetStatusResponse, AudioGetStatus>(new());
+			.SendRequestAsync<AudioGetStatusRequest, AudioGetStatus>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -35,7 +35,7 @@ public class WebOSAudioService(WebOSClient client)
 	public async Task<GetVolume> GetVolumeAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetVolumeRequest, GetVolumeResponse, GetVolume>(new());
+			.SendRequestAsync<GetVolumeRequest, GetVolume>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -51,7 +51,7 @@ public class WebOSAudioService(WebOSClient client)
 		request.Payload.Volume = volume;
 
 		var response = await client
-			.SendRequestAsync<SetVolumeRequest, SetVolumeResponse, SetVolume>(request);
+			.SendRequestAsync<SetVolumeRequest, SetVolume>(request);
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -64,7 +64,7 @@ public class WebOSAudioService(WebOSClient client)
 	public async Task<VolumeUp> VolumeUpAsync()
 	{
 		var response = await client
-			.SendRequestAsync<VolumeUpRequest, VolumeUpResponse, VolumeUp>(new());
+			.SendRequestAsync<VolumeUpRequest, VolumeUp>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -77,7 +77,7 @@ public class WebOSAudioService(WebOSClient client)
 	public async Task<VolumeDown> VolumeDownAsync()
 	{
 		var response = await client
-			.SendRequestAsync<VolumeDownRequest, VolumeDownResponse, VolumeDown>(new());
+			.SendRequestAsync<VolumeDownRequest, VolumeDown>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{

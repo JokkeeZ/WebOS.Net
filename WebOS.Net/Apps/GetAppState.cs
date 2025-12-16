@@ -1,6 +1,7 @@
 ﻿using WebOS.Net.Utils;
 
 namespace WebOS.Net.Apps;
+
 public class GetAppStateRequest : WebOSRequest
 {
 	public override string Uri => WebOSApiURL.GetAppState;
@@ -12,8 +13,6 @@ public class GetAppStateRequestPayload
 {
 	public string Id { get; set; }
 }
-
-public class GetAppStateResponse : WebOSResponse<GetAppState> { }
 
 public class GetAppState : WebOSResponsePayload
 {

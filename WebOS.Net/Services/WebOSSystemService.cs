@@ -16,7 +16,7 @@ public class WebOSSystemService(WebOSClient client)
 	public async Task<GetSystemInfo> GetSystemInfoAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetSystemInfoRequest, GetSystemInfoResponse, GetSystemInfo>(new());
+			.SendRequestAsync<GetSystemInfoRequest, GetSystemInfo>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -34,7 +34,7 @@ public class WebOSSystemService(WebOSClient client)
 	public async Task<GetSystemSettings> GetSystemSettingsAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetSystemSettingsRequest, GetSystemSettingsResponse, GetSystemSettings>(new());
+			.SendRequestAsync<GetSystemSettingsRequest, GetSystemSettings>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -52,7 +52,7 @@ public class WebOSSystemService(WebOSClient client)
 	public async Task<GetServiceList> GetServiceListAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetServiceListRequest, GetServiceListResponse, GetServiceList>(new());
+			.SendRequestAsync<GetServiceListRequest, GetServiceList>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -74,7 +74,7 @@ public class WebOSSystemService(WebOSClient client)
 		request.Payload.ConfigNames.AddRange(configNames);
 
 		var response = await client
-			.SendRequestAsync<GetConfigsRequest, GetConfigsResponse, GetConfigs>(request);
+			.SendRequestAsync<GetConfigsRequest, GetConfigs>(request);
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -87,7 +87,7 @@ public class WebOSSystemService(WebOSClient client)
 	public async Task<GetPowerState> GetPowerStateAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetPowerStateRequest, GetPowerStateResponse, GetPowerState>(new());
+			.SendRequestAsync<GetPowerStateRequest, GetPowerState>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -111,7 +111,7 @@ public class WebOSSystemService(WebOSClient client)
 
 	public async Task<TurnOnScreen> TurnOnScreenAsync()
 	{
-		var response = await client.SendRequestAsync<TurnOnScreenRequest, TurnOnScreenResponse, TurnOnScreen>(new());
+		var response = await client.SendRequestAsync<TurnOnScreenRequest, TurnOnScreen>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -123,7 +123,7 @@ public class WebOSSystemService(WebOSClient client)
 
 	public async Task<TurnOffScreen> TurnOffScreenAsync()
 	{
-		var response = await client.SendRequestAsync<TurnOffScreenRequest, TurnOffScreenResponse, TurnOffScreen>(new());
+		var response = await client.SendRequestAsync<TurnOffScreenRequest, TurnOffScreen>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{

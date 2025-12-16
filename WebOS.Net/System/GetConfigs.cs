@@ -14,8 +14,6 @@ public class GetConfigsRequestPayload
 	public List<string> ConfigNames { get; } = [];
 }
 
-public class GetConfigsResponse : WebOSResponse<GetConfigs> { }
-
 public class GetConfigs : WebOSResponsePayload
 {
 	public Dictionary<string, object> Configs { get; set; }

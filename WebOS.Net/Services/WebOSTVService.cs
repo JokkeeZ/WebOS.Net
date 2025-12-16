@@ -7,7 +7,7 @@ public class WebOSTVService(WebOSClient client)
 	public async Task<GetChannelList> GetChannelListAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetChannelListRequest, GetChannelListResponse, GetChannelList>(new());
+			.SendRequestAsync<GetChannelListRequest, GetChannelList>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -20,7 +20,7 @@ public class WebOSTVService(WebOSClient client)
 	public async Task<GetChannelProgramInfo> GetChannelProgramInfoAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetChannelProgramInfoRequest, GetChannelProgramInfoResponse, GetChannelProgramInfo>(new());
+			.SendRequestAsync<GetChannelProgramInfoRequest, GetChannelProgramInfo>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -33,7 +33,7 @@ public class WebOSTVService(WebOSClient client)
 	public async Task<GetCurrentChannel> GetCurrentChannelAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetCurrentChannelRequest, GetCurrentChannelResponse, GetCurrentChannel>(new());
+			.SendRequestAsync<GetCurrentChannelRequest, GetCurrentChannel>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -88,7 +88,7 @@ public class WebOSTVService(WebOSClient client)
 	public async Task<GetExternalInputList> GetExternalInputListAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetExternalInputListRequest, GetExternalInputListResponse, GetExternalInputList>(new());
+			.SendRequestAsync<GetExternalInputListRequest, GetExternalInputList>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{

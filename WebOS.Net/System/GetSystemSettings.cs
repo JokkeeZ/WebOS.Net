@@ -15,8 +15,6 @@ public class GetSystemSettingsRequest : WebOSRequest
 	};
 }
 
-public class GetSystemSettingsResponse : WebOSResponse<GetSystemSettings> { }
-
 public class GetSystemSettings : WebOSResponsePayload
 {
 	public WebOSSystemSettings Settings { get; set; }

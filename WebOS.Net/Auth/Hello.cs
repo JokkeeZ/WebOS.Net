@@ -8,8 +8,6 @@ public class HelloRequest : WebOSRequest
 	public override string Uri => null;
 }
 
-public class HelloResponse : WebOSResponse<Hello> { }
-
 public class Hello : WebOSResponsePayload
 {
 	public int ProtocolVersion { get; set; }

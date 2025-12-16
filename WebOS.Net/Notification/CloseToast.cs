@@ -14,6 +14,4 @@ public class CloseToastRequestPayload
 	public string ToastId { get; set; }
 }
 
-public class CloseToastResponse : WebOSResponse<CloseToast> { }
-
-public class CloseToast : WebOSResponsePayload { }
+public class CloseToast : WebOSResponsePayload;

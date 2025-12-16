@@ -23,8 +23,6 @@ public class AlertRequestPayload
 	public List<WebOSButton> Buttons { get; set; } = [];
 }
 
-public class AlertResponse : WebOSResponse<CreateAlert> { }
-
 public class CreateAlert : WebOSResponsePayload
 {
 	public string AlertId { get; set; }

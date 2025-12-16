@@ -14,8 +14,6 @@ public class SetVolumeRequestPayload
 	public int Volume { get; set; }
 }
 
-public class SetVolumeResponse : WebOSResponse<SetVolume> { }
-
 public class SetVolume : WebOSResponsePayload
 {
 	public int Volume { get; set; }

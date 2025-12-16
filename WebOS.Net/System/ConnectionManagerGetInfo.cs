@@ -7,8 +7,6 @@ public class ConnectionManagerGetInfoRequest : WebOSRequest
 	public override string Uri { get; } = WebOSApiURL.ConnectionManagerGetInfo;
 }
 
-public class ConnectionManagerGetInfoResponse : WebOSResponse<ConnectionManagerGetInfo> { }
-
 public class ConnectionManagerGetInfo : WebOSResponsePayload
 {
 	public WebOSConnectionInfo WifiInfo { get; set; }

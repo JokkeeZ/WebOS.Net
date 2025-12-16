@@ -7,8 +7,6 @@ public class GetForegroundAppInfoRequest : WebOSRequest
 	public override string Uri { get; } = WebOSApiURL.GetForegroundAppInfo;
 }
 
-public class GetForegroundAppInfoResponse : WebOSResponse<GetForegroundAppInfo> { }
-
 public class GetForegroundAppInfo : WebOSResponsePayload
 {
 	public string AppId { get; set; }

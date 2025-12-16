@@ -7,8 +7,6 @@ public class AudioGetStatusRequest : WebOSRequest
 	public override string Uri => WebOSApiURL.AudioGetStatus;
 }
 
-public class AudioGetStatusResponse : WebOSResponse<AudioGetStatus> { }
-
 public class AudioGetStatus : WebOSResponsePayload
 {
 	public string CallerId { get; set; }

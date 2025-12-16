@@ -7,8 +7,6 @@ public class GetCurrentChannelRequest : WebOSRequest
 	public override string Uri => WebOSApiURL.GetCurrentChannel;
 }
 
-public class GetCurrentChannelResponse : WebOSResponse<GetCurrentChannel> { }
-
 public class GetCurrentChannel : WebOSResponsePayload
 {
 	public string ChannelTypeName { get; set; }

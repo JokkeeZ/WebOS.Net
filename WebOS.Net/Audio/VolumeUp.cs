@@ -7,8 +7,6 @@ public class VolumeUpRequest : WebOSRequest
 	public override string Uri => WebOSApiURL.VolumeUp;
 }
 
-public class VolumeUpResponse : WebOSResponse<VolumeUp> { }
-
 public class VolumeUp : WebOSResponsePayload
 {
 	public int Volume { get; set; }

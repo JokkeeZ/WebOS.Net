@@ -184,7 +184,7 @@ public class WebOSClient : IDisposable
 	/// <exception cref="WebOSException">Thrown when request attempt timeouts or invalid response is received.</exception>
 	public async Task<GetPointerInputSocket> GetInputSocketAsync()
 	{
-		var response = await SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocketResponse, GetPointerInputSocket>(new());
+		var response = await SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocket>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -225,15 +225,14 @@ public class WebOSClient : IDisposable
 		}
 	}
 
-	internal async Task<TResponse> ReadResponseAsync<TResponse, TPayload>()
-	where TResponse : WebOSResponse<TPayload>, new()
+	internal async Task<WebOSResponse<TPayload>> ReadResponseAsync<TPayload>()
 	where TPayload : WebOSResponsePayload, new()
 	{
 		var jsonResponse = await ReadJsonResponse();
 
 		if (jsonResponse != null)
 		{
-			var response = JsonSerializer.Deserialize<TResponse>(jsonResponse, JsonSerializeOptions);
+			var response = JsonSerializer.Deserialize<WebOSResponse<TPayload>>(jsonResponse, JsonSerializeOptions);
 
 			if (response != null)
 			{
@@ -261,9 +260,8 @@ public class WebOSClient : IDisposable
 		return response;
 	}
 
-	internal async Task<TResponse> SendRequestAsync<TRequest, TResponse, TPayload>(TRequest req)
+	internal async Task<WebOSResponse<TPayload>> SendRequestAsync<TRequest, TPayload>(TRequest req)
 	where TRequest : WebOSRequest, new()
-	where TResponse : WebOSResponse<TPayload>, new()
 	where TPayload : WebOSResponsePayload, new()
 	{
 		req.Id = Id;
@@ -277,7 +275,7 @@ public class WebOSClient : IDisposable
 		await ws.SendAsync(new ArraySegment<byte>(request), WebSocketMessageType.Text, true, cts.Token);
 
 		var response = await ReadJsonResponse();
-		return JsonSerializer.Deserialize<TResponse>(response, JsonSerializeOptions);
+		return JsonSerializer.Deserialize<WebOSResponse<TPayload>>(response, JsonSerializeOptions);
 	}
 
 	internal async Task<WebOSDefaultResponse> SendRequestAsync<TRequest>(TRequest req)
@@ -297,9 +295,9 @@ public class WebOSClient : IDisposable
 		return JsonSerializer.Deserialize<WebOSDefaultResponse>(response, JsonSerializeOptions);
 	}
 
-	private async Task<HelloResponse> HelloRequestAsync()
+	private async Task<WebOSResponse<Hello>> HelloRequestAsync()
 	{
-		var response = await SendRequestAsync<HelloRequest, HelloResponse, Hello>(new());
+		var response = await SendRequestAsync<HelloRequest, Hello>(new());
 
 		if (response.Type != "hello")
 		{
@@ -314,7 +312,7 @@ public class WebOSClient : IDisposable
 		var request = new RegistrationRequest();
 		request.Payload.ClientKey = ClientKey;
 
-		var response = await SendRequestAsync<RegistrationRequest, RegistrationResponse, Registration>(request);
+		var response = await SendRequestAsync<RegistrationRequest, Registration>(request);
 
 		if (response.Type == "registered")
 		{
@@ -323,7 +321,7 @@ public class WebOSClient : IDisposable
 
 		if (response.Type == "response" && response.Payload.PairingType == "PROMPT")
 		{
-			var registration = await ReadResponseAsync<RegistrationResponse, Registration>();
+			var registration = await ReadResponseAsync<Registration>();
 
 			if (registration.Type != "registered")
 			{

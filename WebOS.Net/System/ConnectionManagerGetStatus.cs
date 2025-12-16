@@ -7,8 +7,6 @@ public class ConnectionManagerGetStatusRequest : WebOSRequest
 	public override string Uri { get; } = WebOSApiURL.ConnectionManagerGetStatus;
 }
 
-public class ConnectionManagerGetStatusResponse : WebOSResponse<ConnectionManagerGetStatus> { }
-
 public class ConnectionManagerGetStatus : WebOSResponsePayload
 {
 	public WebOSWifiDirect WifiDirect { get; set; }

@@ -7,8 +7,6 @@ public class GetExternalInputListRequest : WebOSRequest
 	public override string Uri => WebOSApiURL.GetExternalInputList;
 }
 
-public class GetExternalInputListResponse : WebOSResponse<GetExternalInputList> { }
-
 public class GetExternalInputList : WebOSResponsePayload
 {
 	public List<ExternalInputDevice> Devices { get; set; }

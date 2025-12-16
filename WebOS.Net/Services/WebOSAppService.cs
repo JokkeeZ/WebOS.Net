@@ -15,7 +15,7 @@ public class WebOSAppService(WebOSClient client)
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<ListApps> ListAppsAsync()
 	{
-		var response = await client.SendRequestAsync<ListAppsRequest, ListAppsResponse, ListApps>(new());
+		var response = await client.SendRequestAsync<ListAppsRequest, ListApps>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -37,7 +37,7 @@ public class WebOSAppService(WebOSClient client)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(payload.Id));
 
-		var response = await client.SendRequestAsync<LaunchRequest, LaunchResponse, Launch>(new()
+		var response = await client.SendRequestAsync<LaunchRequest, Launch>(new()
 		{
 			Payload = payload
 		});
@@ -58,7 +58,7 @@ public class WebOSAppService(WebOSClient client)
 	public async Task<ListLaunchPoints> ListLaunchPointsAsync()
 	{
 		var response = await client
-			.SendRequestAsync<ListLaunchPointsRequest, ListLaunchPointsResponse, ListLaunchPoints>(new());
+			.SendRequestAsync<ListLaunchPointsRequest, ListLaunchPoints>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -76,7 +76,7 @@ public class WebOSAppService(WebOSClient client)
 	public async Task<GetForegroundAppInfo> GetForegroundAppInfoAsync()
 	{
 		var response = await client
-			.SendRequestAsync<GetForegroundAppInfoRequest, GetForegroundAppInfoResponse, GetForegroundAppInfo>(new());
+			.SendRequestAsync<GetForegroundAppInfoRequest, GetForegroundAppInfo>(new());
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{
@@ -117,7 +117,7 @@ public class WebOSAppService(WebOSClient client)
 		state.Payload.Id = appId;
 
 		var response = await client
-			.SendRequestAsync<GetAppStateRequest, GetAppStateResponse, GetAppState>(state);
+			.SendRequestAsync<GetAppStateRequest, GetAppState>(state);
 
 		if (response.Type != "response" || !response.Payload.ReturnValue)
 		{

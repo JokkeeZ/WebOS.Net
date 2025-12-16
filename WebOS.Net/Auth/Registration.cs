@@ -12,7 +12,7 @@ public class RegistrationRequest : WebOSRequest
 
 public class RegistrationPayload
 {
-	public bool ForcePairing { get; } = false;
+	public bool ForcePairing { get; }
 
 	public RegistrationManifest Manifest { get; } = new();
 
@@ -146,8 +146,6 @@ public class RegistrationSigned
 
 	public string VendorId { get; } = "com.lge";
 }
-
-public class RegistrationResponse : WebOSResponse<Registration> { }
 
 public class Registration : WebOSResponsePayload
 {

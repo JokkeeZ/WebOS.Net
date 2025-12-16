@@ -14,8 +14,6 @@ public class SetMuteRequestPayload
 	public bool Mute { get; set; }
 }
 
-public class SetMuteResponse : WebOSResponse<SetMute> { }
-
 public class SetMute : WebOSResponsePayload
 {
 	public bool MuteStatus { get; set; }

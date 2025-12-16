@@ -14,6 +14,4 @@ public class CloseAlertRequestPayload
 	public string AlertId { get; set; }
 }
 
-public class CloseAlertResponse : WebOSResponse<CloseAlert> { }
-
-public class CloseAlert : WebOSResponsePayload { }
+public class CloseAlert : WebOSResponsePayload;
