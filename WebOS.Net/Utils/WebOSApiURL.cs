@@ -39,7 +39,7 @@ internal static class WebOSApiURL
 	internal const string Pause = "ssap://media.controls/pause";
 	internal const string Rewind = "ssap://media.controls/rewind";
 	internal const string FastForward = "ssap://media.controls/fastForward";
-	internal const string InputSocket = "ssap://com.webos.service.networkinput/getPointerInputSocket";
+	internal const string GetPointerInputSocket = "ssap://com.webos.service.networkinput/getPointerInputSocket";
 
 	// 404 no such service or method
 	internal const string TurnOn = "ssap://system/turnOn";
