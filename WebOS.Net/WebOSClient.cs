@@ -125,7 +125,7 @@ public class WebOSClient : IDisposable
 		}
 	}
 
-	static bool SelfSignedLocalhost(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+	internal static bool SelfSignedLocalhost(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
 		=> sslPolicyErrors == SslPolicyErrors.None;
 
 	/// <summary>
@@ -179,7 +179,7 @@ public class WebOSClient : IDisposable
 		return receivedResponse;
 	}
 
-		/// <summary>
+	/// <summary>
 	/// Obtains the pointer to input socket.
 	/// </summary>
 	/// <returns>
@@ -214,20 +214,8 @@ public class WebOSClient : IDisposable
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(socketPath));
 
-		try
-		{
-			var clientWebSocket = new ClientWebSocket();
-			var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(timeout));
-			clientWebSocket.Options.RemoteCertificateValidationCallback = SelfSignedLocalhost;
-
-			await clientWebSocket.ConnectAsync(new(socketPath), tokenSource.Token);
-
-			return new WebOSPointerInputService(clientWebSocket, tokenSource);
-		}
-		catch (TaskCanceledException ex)
-		{
-			throw new WebOSException("Connection timed out.", ex);
-		}
+		var service = new WebOSPointerInputService(timeout);
+		return await service.CreateConnectionAsync(socketPath);
 	}
 
 	internal async Task<WebOSResponse<TPayload>> ReadResponseAsync<TPayload>()

@@ -7,11 +7,29 @@ namespace WebOS.Net.Services;
 /// Represents connection to webOS Pointer Input Socket. Pointer is obtained from
 /// request to <c>ssap://com.webos.service.networkinput/getPointerInputSocket</c>
 /// </summary>
-/// <param name="ws">Active WebSocket connection to the input socket.</param>
-/// <param name="cts">CancellationToken for cancelling the connection and requets.</param>
-public class WebOSPointerInputService(ClientWebSocket ws, CancellationTokenSource cts) : IDisposable
+/// <param name="timeout">Connection timeout in seconds.</param>
+public class WebOSPointerInputService(int timeout) : IDisposable
 {
+	private readonly ClientWebSocket ws = new();
+	private readonly CancellationTokenSource cts = new(TimeSpan.FromSeconds(timeout));
+
 	private bool disposed;
+
+	public async Task<WebOSPointerInputService> CreateConnectionAsync(string socketPath)
+	{
+		try
+		{
+			ws.Options.RemoteCertificateValidationCallback = WebOSClient.SelfSignedLocalhost;
+			await ws.ConnectAsync(new(socketPath), cts.Token);
+
+			return this;
+		}
+		catch (OperationCanceledException ex)
+		{
+			throw new WebOSException("Connection timed out.", ex);
+		}
+	}
+
 
 	/// <summary>
 	/// Sends button click to the input socket.
