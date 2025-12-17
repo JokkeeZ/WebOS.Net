@@ -3,21 +3,16 @@
 public class RegistrationRequest : WebOSRequest
 {
 	public new string Type { get; } = "register";
-
 	public RegistrationPayload Payload { get; } = new();
-
 	[JsonIgnore]
-	public override string Uri => null;
+	public override string Uri => null!;
 }
 
 public class RegistrationPayload
 {
 	public bool ForcePairing { get; }
-
 	public RegistrationManifest Manifest { get; } = new();
-
 	public string PairingType { get; } = "PROMPT";
-
 	[JsonPropertyName("client-key")]
 	public string ClientKey { get; set; } = string.Empty;
 }
@@ -25,9 +20,7 @@ public class RegistrationPayload
 public class RegistrationManifest
 {
 	public string AppVersion { get; } = "1.0";
-
 	public int ManifestVersion { get; } = 1;
-
 	public List<string> Permissions { get; } =
 	[
 		"CONTROL_AUDIO",
@@ -93,21 +86,20 @@ public class RegistrationManifest
 	];
 
 	public List<RegistrationSignature> Signatures { get; } = [new()];
-
+#pragma warning disable CA1720 // Identifier contains type name
 	public RegistrationSigned Signed { get; } = new();
+#pragma warning restore CA1720 // Identifier contains type name
 }
 
 public class RegistrationSignature
 {
 	public string Signature { get; } = "eyJhbGdvcml0aG0iOiAiUlNBLVNIQTI1NiIsICJrZXlJZCI6ICJ3ZWJvcy5uZXQuY2VydCIsICJzaWduYXR1cmVWZXJzaW9uIjoxIn0.RRsewqWqsiaw6aRLLaFW3lQ2IJDmooCOtWHkdROnzC5fPpoICLnPLoZaJkeGTLkw-n-_1NEuFZda2PWY2TQ83NZSdCdeBnyErzUNCaOSt8knA_7vWDs6OBYhQJj6lRIicO5hpE7wt4WdMIyFiWZs_mqYVD7g8U8qmOy6rbD1MG81rFcgq2JCRdlmEOTYr5Sld2TnFpVTZICyZY07FgxjPa-tD2WvHcrL_7VKrL_MfNe5uf1-SfR8sNuhFrML3Uethd_h8ESDCFYve5JyQQVaHpQ0QbMTCEd6bWUn-juezFyCsbb8nDg9pWR_tYlEVEYftVOIzPulmamrJoEermbzow";
-
 	public int SignatureVersion { get; } = 1;
 }
 
 public class RegistrationSigned
 {
 	public string AppId { get; } = "com.lge.test";
-
 	public string Created { get; } = "20140509";
 
 	public Dictionary<string, string> LocalizedAppNames { get; } = new()
@@ -143,16 +135,14 @@ public class RegistrationSigned
 	];
 
 	public string Serial { get; } = "2f930e2d2cfe083771f68e4fe7bb07";
-
 	public string VendorId { get; } = "com.lge";
 }
 
 public class Registration : WebOSResponsePayload
 {
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-	public string PairingType { get; set; }
-
+	public string? PairingType { get; set; }
 	[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 	[JsonPropertyName("client-key")]
-	public string ClientKey { get; set; }
+	public string? ClientKey { get; set; }
 }

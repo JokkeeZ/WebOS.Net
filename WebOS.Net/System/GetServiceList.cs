@@ -9,12 +9,11 @@ public class GetServiceListRequest : WebOSRequest
 
 public class GetServiceList : WebOSResponsePayload
 {
-	public List<WebOSService> Services { get; set; }
+	public List<WebOSService>? Services { get; set; }
 }
 
 public class WebOSService
 {
-	public string Name { get; set; }
-
-	public int Version { get; set; }
+	public string? Name { get; set; }
+	public int? Version { get; set; }
 }

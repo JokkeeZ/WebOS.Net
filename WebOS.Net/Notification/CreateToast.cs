@@ -5,16 +5,15 @@ namespace WebOS.Net.Notification;
 public class CreateToastRequest : WebOSRequest
 {
 	public override string Uri { get; } = WebOSApiURL.CreateToast;
-
 	public ToastRequestPayload Payload { get; } = new();
 }
 
 public class ToastRequestPayload
 {
-	public string Message { get; set; } = string.Empty;
+	public string? Message { get; set; }
 }
 
 public class CreateToast : WebOSResponsePayload
 {
-	public string ToastId { get; set; }
+	public string? ToastId { get; set; }
 }

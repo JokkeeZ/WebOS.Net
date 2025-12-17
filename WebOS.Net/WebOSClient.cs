@@ -19,7 +19,7 @@ public class WebOSClient : IDisposable
 	private readonly ClientWebSocket ws;
 	private bool disposed;
 
-	public string ClientKey { get; set; } = string.Empty;
+	public string? ClientKey { get; set; }
 
 	public IPEndPoint EndPoint { get; set; }
 
@@ -81,6 +81,7 @@ public class WebOSClient : IDisposable
 	{
 		Id = Guid.NewGuid().ToString();
 
+		cts = new();
 		EndPoint = iPEndPoint;
 		ClientKey = clientKey ?? string.Empty;
 		ws = new();
@@ -119,14 +120,16 @@ public class WebOSClient : IDisposable
 
 			return hello.Payload;
 		}
-		catch (TaskCanceledException ex)
+		catch (OperationCanceledException ex)
 		{
 			throw new WebOSException("Connection timed out.", ex);
 		}
 	}
 
-	internal static bool SelfSignedLocalhost(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-		=> sslPolicyErrors == SslPolicyErrors.None;
+	internal static bool SelfSignedLocalhost(object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors)
+	{
+		return true;
+	}
 
 	/// <summary>
 	/// Closes the WebSocket connection to the webOS device asynchronously.
@@ -191,9 +194,9 @@ public class WebOSClient : IDisposable
 	{
 		var response = await SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocket>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -218,7 +221,7 @@ public class WebOSClient : IDisposable
 		return await service.CreateConnectionAsync(socketPath);
 	}
 
-	internal async Task<WebOSResponse<TPayload>> ReadResponseAsync<TPayload>()
+	internal async Task<WebOSResponse<TPayload>?> ReadResponseAsync<TPayload>()
 	where TPayload : WebOSResponsePayload, new()
 	{
 		var jsonResponse = await ReadJsonResponse();
@@ -253,7 +256,7 @@ public class WebOSClient : IDisposable
 		return response;
 	}
 
-	internal async Task<WebOSResponse<TPayload>> SendRequestAsync<TRequest, TPayload>(TRequest req)
+	internal async Task<WebOSResponse<TPayload>?> SendRequestAsync<TRequest, TPayload>(TRequest req)
 	where TRequest : WebOSRequest, new()
 	where TPayload : WebOSResponsePayload, new()
 	{
@@ -271,7 +274,7 @@ public class WebOSClient : IDisposable
 		return JsonSerializer.Deserialize<WebOSResponse<TPayload>>(response, JsonSerializeOptions);
 	}
 
-	internal async Task<WebOSDefaultResponse> SendRequestAsync<TRequest>(TRequest req)
+	internal async Task<WebOSDefaultResponse?> SendRequestAsync<TRequest>(TRequest req)
 	where TRequest : WebOSRequest, new()
 	{
 		req.Id = Id;
@@ -292,6 +295,11 @@ public class WebOSClient : IDisposable
 	{
 		var response = await SendRequestAsync<HelloRequest, Hello>(new());
 
+		if (response is null)
+		{
+			throw new WebOSException("No response received from the device.");
+		}
+
 		if (response.Type != "hello")
 		{
 			throw new WebOSException("Invalid payload received!");
@@ -303,9 +311,14 @@ public class WebOSClient : IDisposable
 	private async Task<bool> RegistrationRequestAsync()
 	{
 		var request = new RegistrationRequest();
-		request.Payload.ClientKey = ClientKey;
+		request.Payload.ClientKey = ClientKey ?? string.Empty;
 
 		var response = await SendRequestAsync<RegistrationRequest, Registration>(request);
+
+		if (response is null)
+		{
+			throw new WebOSException("No response received from the device.");
+		}
 
 		if (response.Type == "registered")
 		{
@@ -315,6 +328,11 @@ public class WebOSClient : IDisposable
 		if (response.Type == "response" && response.Payload.PairingType == "PROMPT")
 		{
 			var registration = await ReadResponseAsync<Registration>();
+
+			if (registration is null)
+			{
+				throw new WebOSException("Invalid payload received!");
+			}
 
 			if (registration.Type != "registered")
 			{

@@ -17,9 +17,9 @@ public class WebOSAppService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<ListAppsRequest, ListApps>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -42,9 +42,9 @@ public class WebOSAppService(WebOSClient client)
 			Payload = payload
 		});
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -60,9 +60,9 @@ public class WebOSAppService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<ListLaunchPointsRequest, ListLaunchPoints>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -78,9 +78,9 @@ public class WebOSAppService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetForegroundAppInfoRequest, GetForegroundAppInfo>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -95,9 +95,9 @@ public class WebOSAppService(WebOSClient client)
 
 		var response = await client.SendRequestAsync(request);
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -119,9 +119,9 @@ public class WebOSAppService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetAppStateRequest, GetAppState>(state);
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;

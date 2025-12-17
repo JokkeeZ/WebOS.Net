@@ -18,9 +18,9 @@ public class WebOSConnectionService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<ConnectionManagerGetStatusRequest, ConnectionManagerGetStatus>(new());
 
-		if (!response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -36,9 +36,9 @@ public class WebOSConnectionService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<ConnectionManagerGetInfoRequest, ConnectionManagerGetInfo>(new());
 
-		if (!response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;

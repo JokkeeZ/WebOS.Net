@@ -16,7 +16,7 @@ public class GetConfigsRequestPayload
 
 public class GetConfigs : WebOSResponsePayload
 {
-	public Dictionary<string, object> Configs { get; set; }
+	public Dictionary<string, object>? Configs { get; set; }
 
-	public List<string> MissingConfigs { get; set; }
+	public List<string>? MissingConfigs { get; set; }
 }

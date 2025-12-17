@@ -9,5 +9,5 @@ public class TurnOffScreenRequest : WebOSRequest
 
 public class TurnOffScreen : WebOSResponsePayload
 {
-	public string State { get; set; }
+	public string? State { get; set; }
 }

@@ -9,7 +9,7 @@ public class WebOSException : Exception
 	/// Initializes a new instance of the <see cref="WebOSException"/> class with a specified error message.
 	/// </summary>
 	/// <param name="message">The message that describes the error.</param>
-	public WebOSException(string message)
+	public WebOSException(string? message)
 		: base(message) { }
 
 	/// <summary>
@@ -21,6 +21,6 @@ public class WebOSException : Exception
 	/// The exception that is the cause of the current exception, 
 	/// or a null reference if no inner exception is specified.
 	/// </param>
-	public WebOSException(string message, Exception innerException)
+	public WebOSException(string? message, Exception? innerException)
 		: base(message, innerException) { }
 }

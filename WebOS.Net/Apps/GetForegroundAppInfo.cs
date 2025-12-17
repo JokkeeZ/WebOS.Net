@@ -9,9 +9,7 @@ public class GetForegroundAppInfoRequest : WebOSRequest
 
 public class GetForegroundAppInfo : WebOSResponsePayload
 {
-	public string AppId { get; set; }
-
-	public string ProcessId { get; set; }
-
-	public string WindowId { get; set; }
+	public string? AppId { get; set; }
+	public string? ProcessId { get; set; }
+	public string? WindowId { get; set; }
 }

@@ -9,5 +9,5 @@ public class GetPowerStateRequest : WebOSRequest
 
 public class GetPowerState : WebOSResponsePayload
 {
-	public string State { get; set; }
+	public string? State { get; set; }
 }

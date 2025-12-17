@@ -23,9 +23,9 @@ public class WebOSNotificationService(WebOSClient client)
 
 		var response = await client.SendRequestAsync<CreateToastRequest, CreateToast>(request);
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -53,9 +53,9 @@ public class WebOSNotificationService(WebOSClient client)
 
 		var response = await client.SendRequestAsync<CreateAlertRequest, CreateAlert>(request);
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -71,9 +71,9 @@ public class WebOSNotificationService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<CloseToastRequest, CloseToast>(request);
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -89,9 +89,9 @@ public class WebOSNotificationService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<CloseAlertRequest, CloseAlert>(request);
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;

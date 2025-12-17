@@ -11,7 +11,7 @@ public class ResponseIdConverter : JsonConverter<string>
 	public override string Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
 	reader.TokenType switch
 	{
-		JsonTokenType.String => reader.GetString(),
+		JsonTokenType.String => reader.GetString()!,
 		JsonTokenType.Number when reader.TryGetInt32(out var i) => string.Create(CultureInfo.InvariantCulture, $"{i}"),
 		_ => throw new JsonException($"Unexpected token type {reader.TokenType} when parsing id.")
 	};

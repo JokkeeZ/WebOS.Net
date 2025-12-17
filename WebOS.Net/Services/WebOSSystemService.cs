@@ -18,9 +18,9 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetSystemInfoRequest, GetSystemInfo>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -36,9 +36,9 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetSystemSettingsRequest, GetSystemSettings>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -54,9 +54,9 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetServiceListRequest, GetServiceList>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -76,9 +76,9 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetConfigsRequest, GetConfigs>(request);
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -89,9 +89,9 @@ public class WebOSSystemService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetPowerStateRequest, GetPowerState>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -101,9 +101,9 @@ public class WebOSSystemService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<TurnOffRequest>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -113,9 +113,9 @@ public class WebOSSystemService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<TurnOnScreenRequest, TurnOnScreen>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -125,9 +125,9 @@ public class WebOSSystemService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<TurnOffScreenRequest, TurnOffScreen>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;

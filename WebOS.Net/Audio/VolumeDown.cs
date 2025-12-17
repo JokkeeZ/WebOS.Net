@@ -9,7 +9,6 @@ public class VolumeDownRequest : WebOSRequest
 
 public class VolumeDown : WebOSResponsePayload
 {
-	public int Volume { get; set; }
-
-	public string SoundOutput { get; set; }
+	public int? Volume { get; set; }
+	public string? SoundOutput { get; set; }
 }

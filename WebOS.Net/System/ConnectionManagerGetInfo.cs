@@ -9,14 +9,12 @@ public class ConnectionManagerGetInfoRequest : WebOSRequest
 
 public class ConnectionManagerGetInfo : WebOSResponsePayload
 {
-	public WebOSConnectionInfo WifiInfo { get; set; }
-
-	public WebOSConnectionInfo WiredInfo { get; set; }
-
-	public WebOSConnectionInfo P2pInfo { get; set; }
+	public WebOSConnectionInfo? WifiInfo { get; set; }
+	public WebOSConnectionInfo? WiredInfo { get; set; }
+	public WebOSConnectionInfo? P2pInfo { get; set; }
 }
 
 public class WebOSConnectionInfo
 {
-	public string MacAddress { get; set; }
+	public string? MacAddress { get; set; }
 }

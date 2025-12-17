@@ -9,5 +9,5 @@ public class GetPointerInputSocketRequest : WebOSRequest
 
 public class GetPointerInputSocket : WebOSResponsePayload
 {
-	public string SocketPath { get; set; }
+	public string? SocketPath { get; set; }
 }

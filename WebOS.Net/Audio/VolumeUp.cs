@@ -9,7 +9,6 @@ public class VolumeUpRequest : WebOSRequest
 
 public class VolumeUp : WebOSResponsePayload
 {
-	public int Volume { get; set; }
-
-	public string SoundOutput { get; set; }
+	public int? Volume { get; set; }
+	public string? SoundOutput { get; set; }
 }

@@ -11,9 +11,9 @@ public class WebOSAudioService(WebOSClient client)
 
 		var response = await client.SendRequestAsync<SetMuteRequest, SetMute>(req);
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -24,9 +24,9 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<AudioGetStatusRequest, AudioGetStatus>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -37,9 +37,9 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<GetVolumeRequest, GetVolume>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -53,9 +53,9 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<SetVolumeRequest, SetVolume>(request);
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -66,9 +66,9 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<VolumeUpRequest, VolumeUp>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -79,9 +79,9 @@ public class WebOSAudioService(WebOSClient client)
 		var response = await client
 			.SendRequestAsync<VolumeDownRequest, VolumeDown>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;

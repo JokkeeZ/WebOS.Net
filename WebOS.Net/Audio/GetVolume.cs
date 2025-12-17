@@ -9,7 +9,6 @@ public class GetVolumeRequest : WebOSRequest
 
 public class GetVolume : WebOSResponsePayload
 {
-	public string CallerId { get; set; }
-
-	public AudioVolumeStatus VolumeStatus { get; set; }
+	public string? CallerId { get; set; }
+	public AudioVolumeStatus? VolumeStatus { get; set; }
 }

@@ -8,9 +8,9 @@ public class WebOSControlService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<PlayRequest>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -20,9 +20,9 @@ public class WebOSControlService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<StopRequest>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -32,9 +32,9 @@ public class WebOSControlService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<PauseRequest>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -44,9 +44,9 @@ public class WebOSControlService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<RewindRequest>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
@@ -56,9 +56,9 @@ public class WebOSControlService(WebOSClient client)
 	{
 		var response = await client.SendRequestAsync<FastForwardRequest>(new());
 
-		if (response.Type != "response" || !response.Payload.ReturnValue)
+		if (response is null)
 		{
-			throw new WebOSException(response.Error);
+			throw new WebOSException("No response received from the device.");
 		}
 
 		return response.Payload;
