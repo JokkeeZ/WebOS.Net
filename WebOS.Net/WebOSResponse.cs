@@ -22,18 +22,18 @@ public class WebOSDefaultResponse
 	/// <summary>
 	/// Gets or sets the type of the response, indicating the nature of the response.
 	/// </summary>
-	public string Type { get; set; }
+	public required string Type { get; set; }
 
 	/// <summary>
 	/// Gets or sets the identifier associated with the response.
 	/// </summary>
 	[JsonConverter(typeof(ResponseIdConverter))]
-	public string Id { get; set; }
+	public string? Id { get; set; }
 
 	/// <summary>
 	/// Gets or sets the error message associated with the response, if any.
 	/// </summary>
-	public string Error { get; set; }
+	public string? Error { get; set; }
 
 	/// <summary>
 	/// Gets or sets the payload data associated with the response.
@@ -49,23 +49,29 @@ public class WebOSResponsePayload
 	/// <summary>
 	/// Indicates whether the request succeeded.
 	/// </summary>
-	public bool ReturnValue { get; set; }
+	public bool? ReturnValue { get; set; }
 
 	/// <summary>
 	/// Indicates whether client is subscribed to receiving callbacks about changes(?)
 	/// TODO: Not sure about this one, have to lookup some documentation from somewhere.
 	/// </summary>
-	public bool Subscribed { get; set; }
+	public bool? Subscribed { get; set; }
 
 	/// <summary>
 	/// In some cases payload contains additional error text.
 	/// </summary>
-	public string ErrorText { get; set; }
+	public string? ErrorText { get; set; }
 
 	/// <summary>
 	/// In some cases payload contains error code.
 	/// </summary>
-	public string ErrorCode { get; set; }
+	public int? ErrorCode { get; set; }
+
+	/// <summary>
+	/// In some cases payload contains response that has 
+	/// almost identical structure as the parent payload.
+	/// </summary>
+	public WebOSResponsePayload? Response { get; set; }
 
 	/// <summary>
 	/// Serializes response to JSON string.
