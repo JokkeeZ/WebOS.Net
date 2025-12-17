@@ -15,7 +15,7 @@ public class WebOSPointerInputService(int timeout) : IDisposable
 
 	private bool disposed;
 
-	public async Task<WebOSPointerInputService> CreateConnectionAsync(string socketPath)
+	internal async Task<WebOSPointerInputService> CreateConnectionAsync(string socketPath)
 	{
 		try
 		{

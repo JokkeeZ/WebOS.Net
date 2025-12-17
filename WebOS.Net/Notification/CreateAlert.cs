@@ -8,10 +8,10 @@ public class CreateAlertRequest : WebOSRequest
 	public AlertRequestPayload Payload { get; } = new();
 }
 
-public class WebOSButton(string label)
+public class WebOSButton(string label, bool focus = false)
 {
-	public required string Label { get; set; } = label;
-	public bool Focus { get; set; }
+	public string Label { get; } = label;
+	public bool Focus { get; } = focus;
 }
 
 public class AlertRequestPayload
