@@ -31,20 +31,38 @@ public class WebOSClient : IDisposable
 	public WebOSNotificationService Notifications { get; init; }
 
 	/// <summary>
-	/// Gets the manager for interacting with applications on the webOS device.
+	/// Gets the service responsible for managing WebOS device apps.
 	/// </summary>
 	public WebOSAppService Apps { get; init; }
 
+	/// <summary>
+	/// Gets the service responsible for managing WebOS device audio.
+	/// </summary>
 	public WebOSAudioService Audio { get; init; }
 
-	public WebOSConnectionService ConnectionManager { get; set; }
+	/// <summary>
+	/// Gets the service responsible for managing WebOS device connections.
+	/// </summary>
+	public WebOSConnectionService ConnectionManager { get; init; }
 
+	/// <summary>
+	/// Gets the service responsible for managing WebOS device system settings.
+	/// </summary>
 	public WebOSSystemService System { get; init; }
 
+	/// <summary>
+	/// Gets the service responsible for managing WebOS device TV-specific features.
+	/// </summary>
 	public WebOSTVService TV { get; init; }
 
+	/// <summary>
+	/// Gets the service responsible for managing WebOS device control features.
+	/// </summary>
 	public WebOSControlService Control { get; init; }
 
+	/// <summary>
+	/// Gets the service responsible for managing WebOS device inputs.
+	/// </summary>
 	public WebOSPointerInputService PointerInputService { get; init; }
 
 	/// <summary>
