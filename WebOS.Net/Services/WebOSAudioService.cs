@@ -9,38 +9,24 @@ public class WebOSAudioService(WebOSClient client)
 		var req = new SetMuteRequest();
 		req.Payload.Mute = mute;
 
-		var response = await client.SendRequestAsync<SetMuteRequest, SetMute>(req);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<SetMuteRequest, SetMute>(req)
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<AudioGetStatus> GetStatusAsync()
 	{
-		var response = await client
-			.SendRequestAsync<AudioGetStatusRequest, AudioGetStatus>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<AudioGetStatusRequest, AudioGetStatus>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<GetVolume> GetVolumeAsync()
 	{
-		var response = await client
-			.SendRequestAsync<GetVolumeRequest, GetVolume>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetVolumeRequest, GetVolume>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -50,39 +36,24 @@ public class WebOSAudioService(WebOSClient client)
 		var request = new SetVolumeRequest();
 		request.Payload.Volume = volume;
 
-		var response = await client
-			.SendRequestAsync<SetVolumeRequest, SetVolume>(request);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<SetVolumeRequest, SetVolume>(request)
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<VolumeUp> VolumeUpAsync()
 	{
-		var response = await client
-			.SendRequestAsync<VolumeUpRequest, VolumeUp>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<VolumeUpRequest, VolumeUp>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<VolumeDown> VolumeDownAsync()
 	{
-		var response = await client
-			.SendRequestAsync<VolumeDownRequest, VolumeDown>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<VolumeDownRequest, VolumeDown>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}

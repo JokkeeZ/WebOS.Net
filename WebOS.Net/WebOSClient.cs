@@ -1,13 +1,8 @@
-﻿using System.Buffers;
-using System.Net;
-using System.Net.Security;
+﻿using System.Net;
 using System.Net.WebSockets;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading;
 using WebOS.Net.Auth;
 using WebOS.Net.Services;
-using WebOS.Net.System;
 
 namespace WebOS.Net;
 
@@ -25,7 +20,8 @@ public class WebOSClient : IDisposable
 	public IPEndPoint EndPoint { get; set; }
 
 	/// <summary>
-	/// Gets a value indicating whether the client is currently paired with the webOS device.
+	/// Gets a value indicating whether the client is 
+	/// currently paired with the webOS device.
 	/// </summary>
 	public bool IsPaired { get; private set; }
 
@@ -47,9 +43,9 @@ public class WebOSClient : IDisposable
 
 	public WebOSTVService TV { get; init; }
 
-	public WebOSControlService Control { get; set; }
+	public WebOSControlService Control { get; init; }
 
-	public WebOSPointerInputService PointerInputService { get; set; }
+	public WebOSPointerInputService PointerInputService { get; init; }
 
 	/// <summary>
 	/// Gets the current state of the WebSocket connection to the webOS device.
@@ -62,12 +58,14 @@ public class WebOSClient : IDisposable
 	public bool IsConnected => State == WebSocketState.Open;
 
 	/// <summary>
-	/// Gets a value indicating whether the client is active, meaning it is both connected and paired with the webOS device.
+	/// Gets a value indicating whether the client is active, 
+	/// meaning it is both connected and paired with the webOS device.
 	/// </summary>
 	public bool IsActive => IsConnected && IsPaired;
 
 	/// <summary>
-	/// Unique id for the requests. webOS will send the id back, so it can be used to verify what client sent the request.
+	/// Unique id for the requests. webOS will send the id back, 
+	/// so it can be used to verify what client sent the request.
 	/// </summary>
 	public string Id { get; }
 
@@ -77,15 +75,17 @@ public class WebOSClient : IDisposable
 	};
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="WebOSClient"/> class with the specified webOS device.
+	/// Initializes a new instance of the WebOSClient class for communicating 
+	/// with a webOS device at the specified network endpoint.
 	/// </summary>
-	/// <param name="device">The webOS device to connect to and interact with.</param>
-	public WebOSClient(IPEndPoint iPEndPoint, string clientKey)
+	/// <param name="iPEndPoint">The network endpoint of the webOS device to connect to.</param>
+	/// <param name="clientKey">The client key used for authentication with the webOS device.</param>
+	public WebOSClient(IPEndPoint iPEndPoint, string? clientKey = "")
 	{
 		Id = Guid.NewGuid().ToString();
 
 		EndPoint = iPEndPoint;
-		ClientKey = clientKey ?? string.Empty;
+		ClientKey = clientKey;
 		ws = new();
 		Notifications = new(this);
 		Apps = new(this);
@@ -97,7 +97,7 @@ public class WebOSClient : IDisposable
 		PointerInputService = new(this);
 	}
 
-	public WebOSClient(string ipAddress, int port, string clientKey)
+	public WebOSClient(string ipAddress, int port, string? clientKey = "")
 		: this(new IPEndPoint(IPAddress.Parse(ipAddress), port), clientKey) { }
 
 	/// <summary>
@@ -110,7 +110,7 @@ public class WebOSClient : IDisposable
 	public async Task<Hello> ConnectAsync(CancellationToken cancellationToken = default)
 	{
 #pragma warning disable CA5359 // Do Not Disable Certificate Validation
-		ws.Options.RemoteCertificateValidationCallback = (_,_,_,_) => true;
+		ws.Options.RemoteCertificateValidationCallback = (_, _, _, _) => true;
 #pragma warning restore CA5359 // Do Not Disable Certificate Validation
 
 		try
@@ -250,7 +250,7 @@ public class WebOSClient : IDisposable
 
 	private async Task<WebOSResponse<Hello>> HelloRequestAsync(CancellationToken cancellationToken = default)
 	{
-		var response = await SendRequestAsync<HelloRequest, Hello>(new(), cancellationToken) 
+		var response = await SendRequestAsync<HelloRequest, Hello>(new(), cancellationToken)
 			?? throw new WebOSException("No response received from the device.");
 
 		if (response.Type != "hello")

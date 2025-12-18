@@ -6,64 +6,40 @@ public class WebOSTVService(WebOSClient client)
 {
 	public async Task<GetChannelList> GetChannelListAsync()
 	{
-		var response = await client
-			.SendRequestAsync<GetChannelListRequest, GetChannelList>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetChannelListRequest, GetChannelList>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<GetChannelProgramInfo> GetChannelProgramInfoAsync()
 	{
-		var response = await client
-			.SendRequestAsync<GetChannelProgramInfoRequest, GetChannelProgramInfo>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetChannelProgramInfoRequest, GetChannelProgramInfo>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<GetCurrentChannel> GetCurrentChannelAsync()
 	{
-		var response = await client
-			.SendRequestAsync<GetCurrentChannelRequest, GetCurrentChannel>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetCurrentChannelRequest, GetCurrentChannel>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<WebOSResponsePayload> ChannelUpAsync()
 	{
-		var response = await client
-			.SendRequestAsync<ChannelUpRequest>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<ChannelUpRequest>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<WebOSResponsePayload> ChannelDownAsync()
 	{
-		var response = await client.SendRequestAsync<ChannelDownRequest>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<ChannelDownRequest>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -75,25 +51,16 @@ public class WebOSTVService(WebOSClient client)
 		var request = new OpenChannelRequest();
 		request.Payload.ChannelNumber = channelNumber;
 
-		var response = await client.SendRequestAsync<OpenChannelRequest>(request);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync(request)
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<GetExternalInputList> GetExternalInputListAsync()
 	{
-		var response = await client
-			.SendRequestAsync<GetExternalInputListRequest, GetExternalInputList>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetExternalInputListRequest, GetExternalInputList>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -105,12 +72,8 @@ public class WebOSTVService(WebOSClient client)
 		var request = new SwitchInputRequest();
 		request.Payload.InputId = inputId;
 
-		var response = await client.SendRequestAsync<SwitchInputRequest>(request);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync(request)
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}

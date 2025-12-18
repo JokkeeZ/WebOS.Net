@@ -21,12 +21,8 @@ public class WebOSNotificationService(WebOSClient client)
 		var request = new CreateToastRequest();
 		request.Payload.Message = message;
 
-		var response = await client.SendRequestAsync<CreateToastRequest, CreateToast>(request);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<CreateToastRequest, CreateToast>(request)
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -51,12 +47,8 @@ public class WebOSNotificationService(WebOSClient client)
 		request.Payload.Message = message;
 		request.Payload.Buttons = buttons;
 
-		var response = await client.SendRequestAsync<CreateAlertRequest, CreateAlert>(request);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<CreateAlertRequest, CreateAlert>(request)
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -68,13 +60,8 @@ public class WebOSNotificationService(WebOSClient client)
 		var request = new CloseToastRequest();
 		request.Payload.ToastId = toastId;
 
-		var response = await client
-			.SendRequestAsync<CloseToastRequest, CloseToast>(request);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<CloseToastRequest, CloseToast>(request)
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -86,13 +73,8 @@ public class WebOSNotificationService(WebOSClient client)
 		var request = new CloseAlertRequest();
 		request.Payload.AlertId = alertId;
 
-		var response = await client
-			.SendRequestAsync<CloseAlertRequest, CloseAlert>(request);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<CloseAlertRequest, CloseAlert>(request)
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}

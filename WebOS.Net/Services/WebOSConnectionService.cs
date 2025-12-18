@@ -15,13 +15,8 @@ public class WebOSConnectionService(WebOSClient client)
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<ConnectionManagerGetStatus> GetStatusAsync()
 	{
-		var response = await client
-			.SendRequestAsync<ConnectionManagerGetStatusRequest, ConnectionManagerGetStatus>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<ConnectionManagerGetStatusRequest, ConnectionManagerGetStatus>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -33,13 +28,8 @@ public class WebOSConnectionService(WebOSClient client)
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<ConnectionManagerGetInfo> GetInfoAsync()
 	{
-		var response = await client
-			.SendRequestAsync<ConnectionManagerGetInfoRequest, ConnectionManagerGetInfo>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<ConnectionManagerGetInfoRequest, ConnectionManagerGetInfo>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}

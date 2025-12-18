@@ -15,13 +15,8 @@ public class WebOSSystemService(WebOSClient client)
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<GetSystemInfo> GetSystemInfoAsync()
 	{
-		var response = await client
-			.SendRequestAsync<GetSystemInfoRequest, GetSystemInfo>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetSystemInfoRequest, GetSystemInfo>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -33,13 +28,8 @@ public class WebOSSystemService(WebOSClient client)
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<GetSystemSettings> GetSystemSettingsAsync()
 	{
-		var response = await client
-			.SendRequestAsync<GetSystemSettingsRequest, GetSystemSettings>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetSystemSettingsRequest, GetSystemSettings>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -51,13 +41,8 @@ public class WebOSSystemService(WebOSClient client)
 	/// <exception cref="WebOSException">Thrown when the request fails, or contains an error.</exception>
 	public async Task<GetServiceList> GetServiceListAsync()
 	{
-		var response = await client
-			.SendRequestAsync<GetServiceListRequest, GetServiceList>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetServiceListRequest, GetServiceList>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
@@ -73,62 +58,40 @@ public class WebOSSystemService(WebOSClient client)
 		var request = new GetConfigsRequest();
 		request.Payload.ConfigNames.AddRange(configNames);
 
-		var response = await client
-			.SendRequestAsync<GetConfigsRequest, GetConfigs>(request);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetConfigsRequest, GetConfigs>(request)
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<GetPowerState> GetPowerStateAsync()
 	{
-		var response = await client
-			.SendRequestAsync<GetPowerStateRequest, GetPowerState>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<GetPowerStateRequest, GetPowerState>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<WebOSResponsePayload> TurnOffAsync()
 	{
-		var response = await client.SendRequestAsync<TurnOffRequest>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<TurnOffRequest>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<TurnOnScreen> TurnOnScreenAsync()
 	{
-		var response = await client.SendRequestAsync<TurnOnScreenRequest, TurnOnScreen>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<TurnOnScreenRequest, TurnOnScreen>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}
 
 	public async Task<TurnOffScreen> TurnOffScreenAsync()
 	{
-		var response = await client.SendRequestAsync<TurnOffScreenRequest, TurnOffScreen>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await client.SendRequestAsync<TurnOffScreenRequest, TurnOffScreen>(new())
+			?? throw new WebOSException("No response received from the device.");
 
 		return response.Payload;
 	}

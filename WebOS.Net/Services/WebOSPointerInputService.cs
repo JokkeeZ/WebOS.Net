@@ -26,11 +26,10 @@ public class WebOSPointerInputService(WebOSClient client) : IDisposable
 	/// <exception cref="WebOSException">Thrown when request attempt timeouts or invalid response is received.</exception>
 	public async Task<GetPointerInputSocket> GetInputSocketAsync(CancellationToken cancellationToken = default)
 	{
-		var response = await client.SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocket>(new(), cancellationToken);
+		var response = await client.SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocket>(new(), cancellationToken)
+			?? throw new WebOSException("No response received from the device.");
 
-		return response is null
-			? throw new WebOSException("No response received from the device.")
-			: response.Payload;
+		return response.Payload;
 	}
 
 	/// <summary>
