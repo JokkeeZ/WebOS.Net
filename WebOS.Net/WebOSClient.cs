@@ -94,6 +94,9 @@ public class WebOSClient : IDisposable
 		ConnectionManager = new(this);
 	}
 
+	public WebOSClient(string ipAddress, int port, string clientKey)
+		: this(new IPEndPoint(IPAddress.Parse(ipAddress), port), clientKey) { }
+
 	/// <summary>
 	/// Establishes a WebSocket connection to the webOS device asynchronously.
 	/// </summary>
@@ -194,12 +197,9 @@ public class WebOSClient : IDisposable
 	{
 		var response = await SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocket>(new());
 
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
-
-		return response.Payload;
+		return response is null 
+			? throw new WebOSException("No response received from the device.") 
+			: response.Payload;
 	}
 
 	/// <summary>
@@ -293,12 +293,8 @@ public class WebOSClient : IDisposable
 
 	private async Task<WebOSResponse<Hello>> HelloRequestAsync()
 	{
-		var response = await SendRequestAsync<HelloRequest, Hello>(new());
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await SendRequestAsync<HelloRequest, Hello>(new()) 
+			?? throw new WebOSException("No response received from the device.");
 
 		if (response.Type != "hello")
 		{
@@ -313,12 +309,8 @@ public class WebOSClient : IDisposable
 		var request = new RegistrationRequest();
 		request.Payload.ClientKey = ClientKey ?? string.Empty;
 
-		var response = await SendRequestAsync<RegistrationRequest, Registration>(request);
-
-		if (response is null)
-		{
-			throw new WebOSException("No response received from the device.");
-		}
+		var response = await SendRequestAsync<RegistrationRequest, Registration>(request)
+			?? throw new WebOSException("No response received from the device.");
 
 		if (response.Type == "registered")
 		{
@@ -327,12 +319,8 @@ public class WebOSClient : IDisposable
 
 		if (response.Type == "response" && response.Payload.PairingType == "PROMPT")
 		{
-			var registration = await ReadResponseAsync<Registration>();
-
-			if (registration is null)
-			{
-				throw new WebOSException("Invalid payload received!");
-			}
+			var registration = await ReadResponseAsync<Registration>()
+				?? throw new WebOSException("Invalid payload received!");
 
 			if (registration.Type != "registered")
 			{
