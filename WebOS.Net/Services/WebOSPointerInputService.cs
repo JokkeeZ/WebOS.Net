@@ -8,20 +8,21 @@ namespace WebOS.Net.Services;
 /// request to <c>ssap://com.webos.service.networkinput/getPointerInputSocket</c>
 /// </summary>
 /// <param name="timeout">Connection timeout in seconds.</param>
-public class WebOSPointerInputService(int timeout) : IDisposable
+public class WebOSPointerInputService : IDisposable
 {
 	private readonly ClientWebSocket ws = new();
-	private readonly CancellationTokenSource cts = new(TimeSpan.FromSeconds(timeout));
 
 	private bool disposed;
 
-	internal async Task<WebOSPointerInputService> CreateConnectionAsync(string socketPath)
+	internal async Task<WebOSPointerInputService> CreateConnectionAsync(string socketPath, CancellationToken cancellationToken = default)
 	{
 		try
 		{
-			ws.Options.RemoteCertificateValidationCallback = WebOSClient.SelfSignedLocalhost;
-			await ws.ConnectAsync(new(socketPath), cts.Token);
+#pragma warning disable CA5359 // Do Not Disable Certificate Validation
+			ws.Options.RemoteCertificateValidationCallback = (_, _, _, _) => true;
+#pragma warning restore CA5359 // Do Not Disable Certificate Validation
 
+			await ws.ConnectAsync(new(socketPath), cancellationToken);
 			return this;
 		}
 		catch (OperationCanceledException ex)
@@ -30,18 +31,17 @@ public class WebOSPointerInputService(int timeout) : IDisposable
 		}
 	}
 
-
 	/// <summary>
 	/// Sends button click to the input socket.
 	/// </summary>
 	/// <param name="button">Button name.</param>
 	/// <returns>A task that represents the asynchronous operation.</returns>
-	public async Task SendButtonAsync(string button)
+	public async Task SendButtonAsync(string button, CancellationToken cancellationToken = default)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(button));
 
 		var payload = Encoding.UTF8.GetBytes($"type:button\nname:{button}\n\n");
-		await ws.SendAsync(new ArraySegment<byte>(payload), WebSocketMessageType.Text, true, cts.Token);
+		await ws.SendAsync(new ArraySegment<byte>(payload), WebSocketMessageType.Text, true, cancellationToken);
 	}
 
 	/// <summary>
@@ -64,7 +64,6 @@ public class WebOSPointerInputService(int timeout) : IDisposable
 			if (disposing)
 			{
 				ws.Dispose();
-				cts.Dispose();
 			}
 
 			disposed = true;

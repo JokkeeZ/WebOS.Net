@@ -3,6 +3,7 @@ using System.Net.Security;
 using System.Net.WebSockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using WebOS.Net.Auth;
 using WebOS.Net.Services;
 using WebOS.Net.System;
@@ -15,7 +16,6 @@ namespace WebOS.Net;
 /// </summary>
 public class WebOSClient : IDisposable
 {
-	private CancellationTokenSource cts;
 	private readonly ClientWebSocket ws;
 	private bool disposed;
 
@@ -81,7 +81,6 @@ public class WebOSClient : IDisposable
 	{
 		Id = Guid.NewGuid().ToString();
 
-		cts = new();
 		EndPoint = iPEndPoint;
 		ClientKey = clientKey ?? string.Empty;
 		ws = new();
@@ -100,23 +99,24 @@ public class WebOSClient : IDisposable
 	/// <summary>
 	/// Establishes a WebSocket connection to the webOS device asynchronously.
 	/// </summary>
-	/// <param name="timeout">Connection timeout in seconds (default is 5 seconds).</param>
 	/// <returns>The payload of the 'hello' response upon successful connection.</returns>
+	/// <param name="cancellationToken">A cancellation token used to propagate notification that the operation should be canceled.</param>
 	/// <exception cref="WebOSException">Thrown when connection attempt times out or authentication fails.</exception>
-	public async Task<Hello> ConnectAsync(int timeout = 5)
+	public async Task<Hello> ConnectAsync(CancellationToken cancellationToken = default)
 	{
-		ws.Options.RemoteCertificateValidationCallback = SelfSignedLocalhost;
-		cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeout));
+#pragma warning disable CA5359 // Do Not Disable Certificate Validation
+		ws.Options.RemoteCertificateValidationCallback = (_,_,_,_) => true;
+#pragma warning restore CA5359 // Do Not Disable Certificate Validation
 
 		try
 		{
-			await ws.ConnectAsync(new($"wss://{EndPoint.Address}:{EndPoint.Port}"), cts.Token);
+			await ws.ConnectAsync(new($"wss://{EndPoint.Address}:{EndPoint.Port}"), cancellationToken);
 
-			var hello = await HelloRequestAsync();
+			var hello = await HelloRequestAsync(cancellationToken);
 
-			if (!await RegistrationRequestAsync())
+			if (!await RegistrationRequestAsync(cancellationToken))
 			{
-				await DisconnectAsync();
+				await DisconnectAsync(cancellationToken);
 			}
 
 			IsPaired = true;
@@ -129,40 +129,32 @@ public class WebOSClient : IDisposable
 		}
 	}
 
-	internal static bool SelfSignedLocalhost(object sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors)
-	{
-		return true;
-	}
-
 	/// <summary>
 	/// Closes the WebSocket connection to the webOS device asynchronously.
 	/// </summary>
-	public async Task DisconnectAsync()
+	/// <param name="cancellationToken">A cancellation token used to propagate notification that the operation should be canceled.</param>
+	public async Task DisconnectAsync(CancellationToken cancellationToken = default)
 	{
 		if (ws.State == WebSocketState.Open)
 		{
-			await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", cts.Token);
+			await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", cancellationToken);
 		}
 	}
 
 	/// <summary>
-	/// Cancels any ongoing asynchronous operations.
-	/// </summary>
-	public async Task CancelAsync() => await cts.CancelAsync();
-
-	/// <summary>
 	/// Reads a JSON response from the webOS asynchronously.
 	/// </summary>
+	/// <param name="cancellationToken">A cancellation token used to propagate notification that the operation should be canceled.</param>
 	/// <returns>The JSON response received from the device.</returns>
-	public async Task<string> ReadJsonResponse()
+	public async Task<string> ReadJsonResponse(CancellationToken cancellationToken = default)
 	{
 		var message = new byte[4096];
 		var receivedBytes = 0;
 
-		while (!cts.IsCancellationRequested)
+		while (!cancellationToken.IsCancellationRequested)
 		{
 			var buffer = new byte[4096];
-			var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), cts.Token);
+			var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
 
 			receivedBytes += result.Count;
 
@@ -188,14 +180,15 @@ public class WebOSClient : IDisposable
 	/// <summary>
 	/// Obtains the pointer to input socket.
 	/// </summary>
+	/// <param name="cancellationToken">A cancellation token used to propagate notification that the operation should be canceled.</param>
 	/// <returns>
 	/// Returns new instance of the <see cref="GetPointerInputSocket"/> that contains socket path for the 
 	/// input socket.
 	/// </returns>
 	/// <exception cref="WebOSException">Thrown when request attempt timeouts or invalid response is received.</exception>
-	public async Task<GetPointerInputSocket> GetInputSocketAsync()
+	public async Task<GetPointerInputSocket> GetInputSocketAsync(CancellationToken cancellationToken = default)
 	{
-		var response = await SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocket>(new());
+		var response = await SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocket>(new(), cancellationToken);
 
 		return response is null 
 			? throw new WebOSException("No response received from the device.") 
@@ -206,25 +199,25 @@ public class WebOSClient : IDisposable
 	/// Connects to given input socket. Input socket can be obtained from <see cref="GetInputSocketAsync"/>.
 	/// </summary>
 	/// <param name="socketPath">Input socket path</param>
-	/// <param name="timeout">Connection timeout in seconds (default is 5 seconds).</param>
+	/// <param name="cancellationToken">A cancellation token used to propagate notification that the operation should be canceled.</param>
 	/// <returns>
 	/// Returns new instance of the <see cref="WebOSPointerInputService"/> that can be used to
 	/// interract with input socket.
 	/// </returns>
 	/// <exception cref="ArgumentException">Thrown when socket path is null or whitespace.</exception>
 	/// <exception cref="WebOSException">Thrown when connection attempt timeouts or socket path is invalid.</exception>
-	public static async Task<WebOSPointerInputService> ConnectToInputSocketAsync(string socketPath, int timeout = 5)
+	public static async Task<WebOSPointerInputService> ConnectToInputSocketAsync(string socketPath, CancellationToken cancellationToken = default)
 	{
 		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(socketPath));
 
-		var service = new WebOSPointerInputService(timeout);
-		return await service.CreateConnectionAsync(socketPath);
+		var service = new WebOSPointerInputService();
+		return await service.CreateConnectionAsync(socketPath, cancellationToken);
 	}
 
-	internal async Task<WebOSResponse<TPayload>?> ReadResponseAsync<TPayload>()
+	internal async Task<WebOSResponse<TPayload>?> ReadResponseAsync<TPayload>(CancellationToken cancellationToken = default)
 	where TPayload : WebOSResponsePayload, new()
 	{
-		var jsonResponse = await ReadJsonResponse();
+		var jsonResponse = await ReadJsonResponse(cancellationToken);
 
 		if (jsonResponse != null)
 		{
@@ -239,7 +232,7 @@ public class WebOSClient : IDisposable
 		return null;
 	}
 
-	internal async Task<string> SendRequestWithJsonResponseAsync<TRequest>(TRequest req)
+	internal async Task<string> SendRequestWithJsonResponseAsync<TRequest>(TRequest req, CancellationToken cancellationToken = default)
 	where TRequest : WebOSRequest, new()
 	{
 		req.Id = Id;
@@ -250,13 +243,13 @@ public class WebOSClient : IDisposable
 		Console.ResetColor();
 #endif
 		var request = Encoding.UTF8.GetBytes(json);
-		await ws.SendAsync(new ArraySegment<byte>(request), WebSocketMessageType.Text, true, cts.Token);
+		await ws.SendAsync(new ArraySegment<byte>(request), WebSocketMessageType.Text, true, cancellationToken);
 
-		var response = await ReadJsonResponse();
+		var response = await ReadJsonResponse(cancellationToken);
 		return response;
 	}
 
-	internal async Task<WebOSResponse<TPayload>?> SendRequestAsync<TRequest, TPayload>(TRequest req)
+	internal async Task<WebOSResponse<TPayload>?> SendRequestAsync<TRequest, TPayload>(TRequest req, CancellationToken cancellationToken = default)
 	where TRequest : WebOSRequest, new()
 	where TPayload : WebOSResponsePayload, new()
 	{
@@ -268,13 +261,13 @@ public class WebOSClient : IDisposable
 		Console.ResetColor();
 #endif
 		var request = Encoding.UTF8.GetBytes(json);
-		await ws.SendAsync(new ArraySegment<byte>(request), WebSocketMessageType.Text, true, cts.Token);
+		await ws.SendAsync(new ArraySegment<byte>(request), WebSocketMessageType.Text, true, cancellationToken);
 
-		var response = await ReadJsonResponse();
+		var response = await ReadJsonResponse(cancellationToken);
 		return JsonSerializer.Deserialize<WebOSResponse<TPayload>>(response, JsonSerializeOptions);
 	}
 
-	internal async Task<WebOSDefaultResponse?> SendRequestAsync<TRequest>(TRequest req)
+	internal async Task<WebOSDefaultResponse?> SendRequestAsync<TRequest>(TRequest req, CancellationToken cancellationToken = default)
 	where TRequest : WebOSRequest, new()
 	{
 		req.Id = Id;
@@ -285,15 +278,15 @@ public class WebOSClient : IDisposable
 		Console.ResetColor();
 #endif
 		var request = Encoding.UTF8.GetBytes(json);
-		await ws.SendAsync(new ArraySegment<byte>(request), WebSocketMessageType.Text, true, cts.Token);
+		await ws.SendAsync(new ArraySegment<byte>(request), WebSocketMessageType.Text, true, cancellationToken);
 
-		var response = await ReadJsonResponse();
+		var response = await ReadJsonResponse(cancellationToken);
 		return JsonSerializer.Deserialize<WebOSDefaultResponse>(response, JsonSerializeOptions);
 	}
 
-	private async Task<WebOSResponse<Hello>> HelloRequestAsync()
+	private async Task<WebOSResponse<Hello>> HelloRequestAsync(CancellationToken cancellationToken = default)
 	{
-		var response = await SendRequestAsync<HelloRequest, Hello>(new()) 
+		var response = await SendRequestAsync<HelloRequest, Hello>(new(), cancellationToken) 
 			?? throw new WebOSException("No response received from the device.");
 
 		if (response.Type != "hello")
@@ -304,12 +297,12 @@ public class WebOSClient : IDisposable
 		return response;
 	}
 
-	private async Task<bool> RegistrationRequestAsync()
+	private async Task<bool> RegistrationRequestAsync(CancellationToken cancellationToken = default)
 	{
 		var request = new RegistrationRequest();
 		request.Payload.ClientKey = ClientKey ?? string.Empty;
 
-		var response = await SendRequestAsync<RegistrationRequest, Registration>(request)
+		var response = await SendRequestAsync<RegistrationRequest, Registration>(request, cancellationToken)
 			?? throw new WebOSException("No response received from the device.");
 
 		if (response.Type == "registered")
@@ -319,7 +312,7 @@ public class WebOSClient : IDisposable
 
 		if (response.Type == "response" && response.Payload.PairingType == "PROMPT")
 		{
-			var registration = await ReadResponseAsync<Registration>()
+			var registration = await ReadResponseAsync<Registration>(cancellationToken)
 				?? throw new WebOSException("Invalid payload received!");
 
 			if (registration.Type != "registered")
