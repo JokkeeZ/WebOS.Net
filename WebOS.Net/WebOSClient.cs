@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Buffers;
+using System.Net;
 using System.Net.Security;
 using System.Net.WebSockets;
 using System.Security.Cryptography.X509Certificates;
@@ -151,26 +152,22 @@ public class WebOSClient : IDisposable
 	/// <returns>The JSON response received from the device.</returns>
 	public async Task<string> ReadJsonResponse(CancellationToken cancellationToken = default)
 	{
-		var message = new byte[4096];
-		var receivedBytes = 0;
+		using var stream = new MemoryStream();
+		var buffer = new byte[4096];
 
-		while (!cancellationToken.IsCancellationRequested)
+		ValueWebSocketReceiveResult result;
+		do
 		{
-			var buffer = new byte[4096];
-			var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
-
-			receivedBytes += result.Count;
-
-			Array.Resize(ref message, receivedBytes);
-			Array.Copy(buffer, 0, message, receivedBytes - result.Count, result.Count);
-
-			if (result.EndOfMessage)
-			{
-				break;
-			}
+			result = await ws.ReceiveAsync(new Memory<byte>(buffer), cancellationToken);
+			stream.Write(buffer, 0, result.Count);
 		}
+		while (!result.EndOfMessage);
 
-		var receivedResponse = Encoding.UTF8.GetString(message, 0, receivedBytes);
+		stream.Seek(0, SeekOrigin.Begin);
+
+		using var reader = new StreamReader(stream, Encoding.UTF8);
+		var receivedResponse = await reader.ReadToEndAsync(cancellationToken);
+
 #if DEBUG
 		Console.ForegroundColor = ConsoleColor.DarkYellow;
 		Console.WriteLine(receivedResponse);
