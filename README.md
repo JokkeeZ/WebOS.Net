@@ -8,24 +8,26 @@
 # Example usage
 ## Sending notification toast to the TV
 ```c#
-// Port 3001 for wss.
-var endPoint = new IPEndPoint(IPAddress.Parse("192.168.0.10"), 3001);
+using var client = new WebOSClient(
+	// WebOS TV IPv4 address
+	ipAddress: "192.168.0.11",
 
-// Leave empty for the first time use.
-// After obtaining the client-key, use it so TV doesn't prompt.
-var clientKey = "ym4uui9suqq0xfntpuu9uzrwj67pyxig";
-using var client = new WebOSClient(endPoint, clientKey);
+	// Port 3001 for wss.
+	port: 3001,
 
-// The TV will display a prompt if a client key is not given.
+	// Provide a client-key or leave empty to obtain a client-key.
+	clientKey: string.Empty
+);
+
+// The TV will display a prompt if a client-key is not provided.
 await client.ConnectAsync();
 
 if (client.IsPaired)
 {
-    // Save client-key somewhere for future use.
-    Console.WriteLine($"Client Key: {client.ClientKey}");
+	Console.WriteLine($"Client Key: {client.ClientKey}");
 
-    // Send Toast notification to webOS TV
-    await client.Notifications.CreateToastAsync("Hello :)");
+	// Send Toast notification to webOS TV
+	await client.Notifications.CreateToastAsync("Hello! :)");
 }
 ```
 ## M-SEARCH for TV IP-Address
