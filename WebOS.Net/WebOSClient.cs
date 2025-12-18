@@ -97,7 +97,10 @@ public class WebOSClient : IDisposable
 	/// with a webOS device at the specified network endpoint.
 	/// </summary>
 	/// <param name="iPEndPoint">The network endpoint of the webOS device to connect to.</param>
-	/// <param name="clientKey">The client key used for authentication with the webOS device.</param>
+	/// <param name="clientKey">
+	/// An optional client key used for authentication with the webOS device. 
+	/// If not provided, an empty string is used.
+	/// </param>
 	public WebOSClient(IPEndPoint iPEndPoint, string? clientKey = "")
 	{
 		Id = Guid.NewGuid().ToString();
@@ -115,6 +118,15 @@ public class WebOSClient : IDisposable
 		PointerInputService = new(this);
 	}
 
+	/// <summary>
+	/// Initializes a new instance of the WebOSClient class using the specified IP address, port, and optional client key.
+	/// </summary>
+	/// <param name="ipAddress">The IPv4 address of the webOS device to connect to.</param>
+	/// <param name="port">The port number on which the webOS device is listening.</param>
+	/// <param name="clientKey">
+	/// An optional client key used for authentication with the webOS device.
+	/// If not provided, an empty string is used.
+	/// </param>
 	public WebOSClient(string ipAddress, int port, string? clientKey = "")
 		: this(new IPEndPoint(IPAddress.Parse(ipAddress), port), clientKey) { }
 
