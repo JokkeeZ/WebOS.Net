@@ -48,6 +48,8 @@ public class WebOSClient : IDisposable
 
 	public WebOSControlService Control { get; set; }
 
+	public WebOSPointerInputService PointerInputService { get; set; }
+
 	/// <summary>
 	/// Gets the current state of the WebSocket connection to the webOS device.
 	/// </summary>
@@ -91,6 +93,7 @@ public class WebOSClient : IDisposable
 		TV = new(this);
 		Control = new(this);
 		ConnectionManager = new(this);
+		PointerInputService = new(this);
 	}
 
 	public WebOSClient(string ipAddress, int port, string clientKey)
@@ -175,43 +178,6 @@ public class WebOSClient : IDisposable
 #endif
 
 		return receivedResponse;
-	}
-
-	/// <summary>
-	/// Obtains the pointer to input socket.
-	/// </summary>
-	/// <param name="cancellationToken">A cancellation token used to propagate notification that the operation should be canceled.</param>
-	/// <returns>
-	/// Returns new instance of the <see cref="GetPointerInputSocket"/> that contains socket path for the 
-	/// input socket.
-	/// </returns>
-	/// <exception cref="WebOSException">Thrown when request attempt timeouts or invalid response is received.</exception>
-	public async Task<GetPointerInputSocket> GetInputSocketAsync(CancellationToken cancellationToken = default)
-	{
-		var response = await SendRequestAsync<GetPointerInputSocketRequest, GetPointerInputSocket>(new(), cancellationToken);
-
-		return response is null 
-			? throw new WebOSException("No response received from the device.") 
-			: response.Payload;
-	}
-
-	/// <summary>
-	/// Connects to given input socket. Input socket can be obtained from <see cref="GetInputSocketAsync"/>.
-	/// </summary>
-	/// <param name="socketPath">Input socket path</param>
-	/// <param name="cancellationToken">A cancellation token used to propagate notification that the operation should be canceled.</param>
-	/// <returns>
-	/// Returns new instance of the <see cref="WebOSPointerInputService"/> that can be used to
-	/// interract with input socket.
-	/// </returns>
-	/// <exception cref="ArgumentException">Thrown when socket path is null or whitespace.</exception>
-	/// <exception cref="WebOSException">Thrown when connection attempt timeouts or socket path is invalid.</exception>
-	public static async Task<WebOSPointerInputService> ConnectToInputSocketAsync(string socketPath, CancellationToken cancellationToken = default)
-	{
-		ArgumentException.ThrowIfNullOrWhiteSpace(nameof(socketPath));
-
-		var service = new WebOSPointerInputService();
-		return await service.CreateConnectionAsync(socketPath, cancellationToken);
 	}
 
 	internal async Task<WebOSResponse<TPayload>?> ReadResponseAsync<TPayload>(CancellationToken cancellationToken = default)
