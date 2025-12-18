@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="WebOS.Net/WebOS.Net.csproj" />
+  <Project Path="Example/Example.csproj" />
+</Solution>
