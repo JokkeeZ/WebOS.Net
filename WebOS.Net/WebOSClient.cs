@@ -105,6 +105,7 @@ public class WebOSClient : IDisposable
 	/// </summary>
 	/// <returns>The payload of the 'hello' response upon successful connection.</returns>
 	/// <param name="cancellationToken">A cancellation token used to propagate notification that the operation should be canceled.</param>
+	/// <exception cref="WebSocketException">Thrown when connection fails.</exception>
 	/// <exception cref="WebOSException">Thrown when connection attempt times out or authentication fails.</exception>
 	public async Task<Hello> ConnectAsync(CancellationToken cancellationToken = default)
 	{
